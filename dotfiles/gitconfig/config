@@ -1,0 +1,29 @@
+[user]
+    email = {{email}}
+    name = {{name}}
+    signingkey = {{git_signing_key}}
+[commit]
+	gpgsign = true
+[gpg]
+	format = "ssh"
+[gpg "ssh"]
+	allowedSignersFile = "/home/{{username}}/.config/git/allowed_signers"
+[pull]
+    ff = true
+    rebase = true
+[core]
+    editor = nvim
+    {{#if (is_executable "delta")}}
+    pager = delta
+    {{/if}}
+{{#if (is_executable "delta")}}
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    navigate = true    # use n and N to move between diff sections
+[merge]
+    conflictstyle = diff3
+[diff]
+    colorMoved = default
+{{/if}}
+

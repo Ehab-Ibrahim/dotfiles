@@ -1,0 +1,8 @@
+{{#if (is_executable "delta")}}
+git:
+  pagers:
+    - pager: delta --paging=never
+{{/if}}
+update:
+  method: never
+

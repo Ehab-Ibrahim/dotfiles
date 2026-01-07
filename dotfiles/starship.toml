@@ -1,0 +1,65 @@
+format = """
+$username\
+$hostname\
+$shlvl\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+$docker_context\
+$golang\
+$python\
+$rust\
+$conda\
+$env_var\
+$custom\
+$cmd_duration\
+$time\
+$line_break\
+$lua\
+$jobs\
+$battery\
+$status\
+$shell\
+$character"""
+
+[shell]
+fish_indicator = "󰈺"
+bash_indicator = ""
+disabled = false
+
+[character]
+success_symbol = "[➜](bold green) "
+error_symbol = "[✗](bold red) "
+
+[time]
+disabled = false
+format = 'at 🕙 [$time]($style) '
+style = "bold fg:75"
+time_format = "%R"
+
+[python]
+version_format = "v${major}.${minor}"
+
+[conda]
+symbol = " "
+
+[docker_context]
+symbol = " "
+
+[git_commit]
+commit_hash_length = 5
+tag_disabled = false
+tag_symbol = "\uf02b "
+
+[golang]
+symbol = " "
+
+[julia]
+symbol = " "
+
+[rust]
+symbol = " "
+
+

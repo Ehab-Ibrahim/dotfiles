@@ -1,0 +1,141 @@
+version = 1
+
+[envs.ripgrep]
+channels = ["conda-forge"]
+dependencies = { ripgrep = "*" }
+exposed = { rg = "rg" }
+
+[envs.lazygit]
+channels = ["conda-forge"]
+dependencies = { lazygit = "*" }
+exposed = { lazygit = "lazygit" }
+
+[envs.direnv]
+channels = ["conda-forge"]
+dependencies = { direnv = "*" }
+exposed = { direnv = "direnv" }
+
+[envs.fzf]
+channels = ["conda-forge"]
+dependencies = { fzf = "*" }
+exposed = { fzf = "fzf" }
+
+[envs.starship]
+channels = ["conda-forge"]
+dependencies = { starship = "*" }
+exposed = { starship = "starship" }
+
+[envs.zoxide]
+channels = ["conda-forge"]
+dependencies = { zoxide = "*" }
+exposed = { zoxide = "zoxide" }
+
+[envs.bat]
+channels = ["conda-forge"]
+dependencies = { bat = "*" }
+exposed = { bat = "bat" }
+
+[envs.btop]
+channels = ["conda-forge"]
+dependencies = { btop = "*" }
+exposed = { btop = "btop" }
+
+[envs.verilator]
+channels = ["conda-forge"]
+dependencies = { verilator = "*" , zlib = "*" }
+exposed = { verilator = "verilator", verilator_bin = "verilator_bin", verilator_coverage = "verilator_coverage", verilator_coverage_bin_dbg = "verilator_coverage_bin_dbg", verilator_gantt = "verilator_gantt", verilator_profcfunc = "verilator_profcfunc" }
+
+[envs.git]
+channels = ["conda-forge"]
+dependencies = { git = "*" }
+exposed = { git = "git", git-cvsserver = "git-cvsserver", git-receive-pack = "git-receive-pack", git-shell = "git-shell", git-upload-archive = "git-upload-archive", git-upload-pack = "git-upload-pack", gitk = "gitk", scalar = "scalar" }
+
+[envs.verible]
+channels = ["conda-forge"]
+dependencies = { verible = "*" }
+exposed = { verible-verilog-diff = "verible-verilog-diff", verible-verilog-format = "verible-verilog-format", verible-verilog-kythe-extractor = "verible-verilog-kythe-extractor", verible-verilog-lint = "verible-verilog-lint", verible-verilog-ls = "verible-verilog-ls", verible-verilog-obfuscate = "verible-verilog-obfuscate", verible-verilog-preprocessor = "verible-verilog-preprocessor", verible-verilog-project = "verible-verilog-project", verible-verilog-syntax = "verible-verilog-syntax" }
+
+[envs.nvim]
+channels = ["conda-forge"]
+dependencies = { nvim = "*" }
+exposed = { nvim = "nvim" }
+
+[envs.eza]
+channels = ["conda-forge"]
+dependencies = { eza = "*" }
+exposed = { eza = "eza" }
+
+[envs.dust]
+channels = ["conda-forge"]
+dependencies = { dust = "*" }
+exposed = { dust = "dust" }
+
+[envs.zellij]
+channels = ["conda-forge"]
+dependencies = { zellij = "*" }
+exposed = { zellij = "zellij" }
+
+[envs.nnn]
+channels = ["conda-forge"]
+dependencies = { nnn = "*" }
+exposed = { nnn = "nnn" }
+
+[envs.helix]
+channels = ["conda-forge"]
+dependencies = { helix = "*" }
+exposed = { hx = "hx" }
+
+[envs.ruff]
+channels = ["conda-forge"]
+dependencies = { ruff = "*" }
+exposed = { ruff = "ruff" }
+
+[envs.nushell]
+channels = ["conda-forge"]
+dependencies = { nushell = "*" }
+exposed = { nu = "nu" }
+
+[envs.fish]
+channels = ["conda-forge"]
+dependencies = { fish = "*" }
+exposed = { fish = "fish", fish_indent = "fish_indent", fish_key_reader = "fish_key_reader" }
+
+[envs.fd-find]
+channels = ["conda-forge"]
+dependencies = { fd-find = "*" }
+exposed = { fd = "fd" }
+
+[envs.git-delta]
+channels = ["conda-forge"]
+dependencies = { git-delta = "*" }
+exposed = { delta = "delta" }
+
+[envs.yazi]
+channels = ["conda-forge"]
+dependencies = { yazi = "*" }
+exposed = { ya = "ya", yazi = "yazi" }
+
+[envs.basedpyright]
+channels = ["conda-forge"]
+dependencies = { basedpyright = "*" }
+exposed = { basedpyright = "basedpyright", basedpyright-langserver = "basedpyright-langserver" }
+
+[envs.nodejs]
+channels = ["conda-forge"]
+dependencies = { nodejs = "*" }
+exposed = { corepack = "corepack", node = "node", npm = "npm", npx = "npx" }
+
+[envs.taplo]
+channels = ["conda-forge"]
+dependencies = { taplo = "*" }
+exposed = { taplo = "taplo" }
+
+[envs.python]
+channels = ["conda-forge"]
+dependencies = { python = "3.13.*" }
+exposed = { idle3 = "idle3", "idle3.13" = "idle3.13", pydoc = "pydoc", pydoc3 = "pydoc3", "pydoc3.13" = "pydoc3.13", python = "python", python3 = "python3", python3-config = "python3-config", "python3.1" = "python3.1", "python3.13" = "python3.13", "python3.13-config" = "python3.13-config" }
+
+[envs.uv]
+channels = ["conda-forge"]
+dependencies = { uv = "*" }
+exposed = { uv = "uv", uvx = "uvx" }

@@ -1,0 +1,22 @@
+[nvim.files]
+"dotfiles/nvim" = "~/.config/nvim/"
+
+[helix.files]
+"dotfiles/helix" = "~/.config/helix/"
+
+[shell.files]
+"dotfiles/fish" = "~/.config/fish/"
+"dotfiles/gtkwaverc" = "~/.gtkwaverc"
+"dotfiles/starship.toml" = "~/.config/starship.toml"
+"dotfiles/ssh" = "~/.ssh/config"
+"dotfiles/zellij" = "~/.config/zellij/"
+"dotfiles/lazygit.yml" = "~/.config/lazygit/config.yml"
+"dotfiles/pixi-global.toml" = "~/.pixi/manifests/pixi-global.toml"
+
+[git.files]
+"dotfiles/gitconfig/config" = "~/.config/git/config"
+"dotfiles/gitconfig/allowed_signers" = "~/.config/git/allowed_signers"
+
+[ssh.files]
+"dotfiles/ssh/config" = "~/.ssh/config"
+"dotfiles/ssh/rc" = "~/.ssh/rc"

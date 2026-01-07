@@ -1,0 +1,40 @@
+[__config__]
+version = 0
+
+[settings]
+columns = ~#track,~people,~title~version,~album~discsubtitle,~#length
+	
+default_rating = 0.6000000000000001
+ratings = 5
+scan = /home/eibrahim/Music
+
+[plugins]
+active_plugins = Notify
+	Remove Playlist Duplicates
+	Shuffle Playlist
+	Tray Icon
+	WaveformSeekBar
+	mpris
+cover_engine_discogs = True
+icon_tooltip = <album|<album~discnumber~part~tracknumber~title~version>|<artist~title~version>>
+notify_bodypattern = <~length>
+	<album|<album><discsubtitle| - <discsubtitle>>
+	><~year|<~year>>
+notify_show_notifications = all
+notify_titlepattern = <title|<title> - ><artist>
+quodlibet.fake.plugins.gajim_status_accounts = 
+quodlibet.fake.plugins.gajim_status_pattern = <artist> - <title>
+quodlibet.fake.plugins.gajim_status_paused = True
+quodlibet.fake.plugins.gajim_status_statuses = online chat
+quodlibet.fake.plugins.visualisations_executable = projectM-pulseaudio
+quodlibet.fake.plugins.waveformseekbar_seek_amount = 1000
+quodlibet.fake.plugins.waveformseekbar_show_current_pos = True
+randomalbum_use_weights = 0
+scrobbler_service = Last.fm
+shufflebygrouping_grouping = ~grouping~album~albumartist
+shufflebygrouping_grouping_filter = grouping
+squeezebox_debug = False
+titlecase_allow_all_caps = True
+titlecase_human_title_case = True
+view_lyrics_hide_timestamps = true
+
