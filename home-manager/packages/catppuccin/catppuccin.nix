@@ -10,6 +10,7 @@
     exec = "toggle-theme";
     icon = ./theme-light-dark.svg;
   };
+  flavor = config.catppuccin.flavor;
 in {
   catppuccin = {
     flavor = lib.mkDefault "macchiato";
@@ -48,7 +49,7 @@ in {
       helix_theme = lib.hm.dag.entryAfter ["writeBoundary"] ''
         HX_CONFIG=~/.config/helix/config.toml
         if [ -f $HX_CONFIG ]; then
-          sed -i -E 's/theme = ".+"/theme = "catppuccin_${config.catppuccin.flavor}"/g' $HX_CONFIG
+          sed -i -E 's|(theme = )".+"|\1"catppuccin_${flavor}"|g' $HX_CONFIG
           # Reload Helix if any instance is running
           if ${pkgs.procps}/bin/pgrep hx >/dev/null 2>&1; then
             ${pkgs.procps}/bin/pkill -USR1 hx
@@ -60,7 +61,7 @@ in {
       zellij_theme = lib.hm.dag.entryAfter ["writeBoundary"] ''
         ZELLIJ_CONFIG=~/.config/zellij/config.kdl
         if [ -f $ZELLIJ_CONFIG ]; then
-          sed -i -E 's/theme ".+"/theme "catppuccin-${config.catppuccin.flavor}"/g' $ZELLIJ_CONFIG
+          sed -i -E 's|(theme )".+"|\1"catppuccin-${flavor}"|g' $ZELLIJ_CONFIG
         fi
       '';
     })
@@ -68,7 +69,7 @@ in {
       nvim_theme = lib.hm.dag.entryAfter ["writeBoundary"] ''
         NVIM_CONFIG=~/.config/nvim/lua/plugins/colorscheme.lua
         if [ -f $NVIM_CONFIG ]; then
-          sed -i -E 's/colorscheme = ".+"/colorscheme = "catppuccin-${config.catppuccin.flavor}"/g' $NVIM_CONFIG
+          sed -i -E 's|(colorscheme = )".+"|\1"catppuccin-${flavor}"|g' $NVIM_CONFIG
         fi
       '';
     })
