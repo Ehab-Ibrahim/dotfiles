@@ -1,7 +1,4 @@
 if status is-interactive
-  # Set fish colors
-  fish $__fish_config_dir/themes/fish_colors.fish
-
   # Unset CONDA_PREFIX - Needed if fish is installed using pixi
   set -e CONDA_PREFIX
 
