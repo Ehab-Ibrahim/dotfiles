@@ -12,6 +12,12 @@ end
 
 return {
   {
+    "mfussenegger/nvim-dap",
+    opts = function()
+      require("dap").listeners.after.event_initialized["hide_snacks"] = hide_snacks
+    end,
+  },
+  {
     "rcarriga/nvim-dap-ui",
 
     opts = {
