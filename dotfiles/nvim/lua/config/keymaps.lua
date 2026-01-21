@@ -4,7 +4,6 @@
 return {
   vim.keymap.set("i", "jk", "<esc>"),
   vim.keymap.set("i", "kj", "<esc>"),
-  vim.keymap.set("t", "<c-n><c-n>", "<c-\\><c-n>"),
   vim.keymap.set("n", "<leader>ff", LazyVim.pick("files", { root = false }), { desc = "Find Files (cwd)" }),
   vim.keymap.set("n", "<leader>fF", LazyVim.pick("files"), { desc = "Find Files (Root Dir)" }),
   vim.keymap.set("n", "<leader>gg", function() Snacks.lazygit() end, { desc = "Lazygit (cwd)" }),
