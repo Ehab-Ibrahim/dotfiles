@@ -36,6 +36,7 @@ in {
     clangdStandalone
     nil
     ruff
+    tree-sitter
     verible
     verilator
   ];
