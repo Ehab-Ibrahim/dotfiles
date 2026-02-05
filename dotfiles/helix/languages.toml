@@ -28,7 +28,10 @@ language-servers = ["ruff", "basedpyright"]
 
 [[language]]
 name = "verilog"
-language-servers = ["svlangserver", "verible"]
+language-servers = [
+  "svlangserver",
+  { name = "verible", only-features = ["diagnostics"] }
+]
 
 [[language]]
 name = "nix"
