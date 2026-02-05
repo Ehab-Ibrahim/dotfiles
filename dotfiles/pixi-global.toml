@@ -93,7 +93,7 @@ exposed = { ruff = "ruff" }
 [envs.nushell]
 channels = ["conda-forge"]
 dependencies = { nushell = "*" }
-exposed = { nu = "nu" }
+exposed = { nu = "nu", nu_plugin_custom_values = "nu_plugin_custom_values", nu_plugin_example = "nu_plugin_example", nu_plugin_formats = "nu_plugin_formats", nu_plugin_gstat = "nu_plugin_gstat", nu_plugin_inc = "nu_plugin_inc", nu_plugin_polars = "nu_plugin_polars", nu_plugin_query = "nu_plugin_query", nu_plugin_stress_internals = "nu_plugin_stress_internals" }
 
 [envs.fish]
 channels = ["conda-forge"]
@@ -123,12 +123,7 @@ exposed = { basedpyright = "basedpyright", basedpyright-langserver = "basedpyrig
 [envs.nodejs]
 channels = ["conda-forge"]
 dependencies = { nodejs = "*" }
-exposed = { corepack = "corepack", node = "node", npm = "npm", npx = "npx" }
-
-[envs.taplo]
-channels = ["conda-forge"]
-dependencies = { taplo = "*" }
-exposed = { taplo = "taplo" }
+exposed = { node = "node", npm = "npm", npx = "npx" }
 
 [envs.python]
 channels = ["conda-forge"]
@@ -139,3 +134,8 @@ exposed = { idle3 = "idle3", "idle3.13" = "idle3.13", pydoc = "pydoc", pydoc3 = 
 channels = ["conda-forge"]
 dependencies = { uv = "*" }
 exposed = { uv = "uv", uvx = "uvx" }
+
+[envs.tombi]
+channels = ["conda-forge"]
+dependencies = { tombi = "*" }
+exposed = { tombi = "tombi" }
