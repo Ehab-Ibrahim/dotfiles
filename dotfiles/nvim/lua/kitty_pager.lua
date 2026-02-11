@@ -5,6 +5,10 @@ return function(input_line_number, cursor_line, cursor_column)
   vim.opt.modifiable = false
   vim.opt.ignorecase = true
   vim.opt.smartcase = true
+  vim.opt.cmdheight = 0
+
+  -- Make background and foreground inherit from terminal
+  vim.cmd("highlight Normal guibg=NONE guifg=NONE ctermbg=NONE ctermfg=NONE")
 
   vim.keymap.set("n", "q", ":qa!<CR>", { silent = true })
 
