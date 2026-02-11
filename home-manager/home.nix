@@ -18,6 +18,7 @@
     # Packages
     ./packages/catppuccin
     ./packages/cli
+    ./packages/drawio.nix
     ./packages/editors
     ./packages/firefox.nix
     ./packages/nomachine.nix
