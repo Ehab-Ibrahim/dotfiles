@@ -28,12 +28,6 @@
     "@google/gemini-cli"
   ];
 
-  # nh helper
-  programs.nh = {
-    enable = true;
-    flake = "${config.nixConfigRoot}";
-  };
-
   # Enables for stylix
   programs.bat.enable = true;
   programs.fzf.enable = true;
