@@ -5,6 +5,7 @@
     ./fish.nix
     ./fonts.nix
     ./git.nix
+    ./pdf.nix
     ./python.nix
     ./rbw.nix
   ];
