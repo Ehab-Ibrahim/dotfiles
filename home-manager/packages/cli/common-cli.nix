@@ -22,12 +22,6 @@
     zoxide
   ];
 
-  # Copilot/Gemini CLI
-  home.npmGlobal.packages = [
-    "@github/copilot"
-    "@google/gemini-cli"
-  ];
-
   # Enables for stylix
   programs.bat.enable = true;
   programs.fzf.enable = true;

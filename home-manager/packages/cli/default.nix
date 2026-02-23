@@ -1,5 +1,6 @@
 {
   imports = [
+    ./ai.nix
     ./common-cli.nix
     ./fish.nix
     ./fonts.nix
