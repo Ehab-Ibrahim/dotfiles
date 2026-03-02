@@ -1,3 +1,9 @@
+## Formats a package record back into an npm package string.
+def pkg_to_str []: record -> string {
+  let name = if $in.scoped { $"@($in.pkg)" } else { $in.pkg }
+  if $in.ver != null { $"($name)@($in.ver)" } else { $name }
+}
+
 ## Manages global npm packages, installing wanted and removing unlisted ones.
 def main [
     wanted_pkgs_str: string # A space-separated string of desired npm packages
@@ -8,19 +14,27 @@ def main [
     | lines
     | skip 1
     | compact -e
-    | parse "{_} @{pkg}@{ver}"
+    | each {|line|
+        # Notice the space before " @"
+        if ($line | str contains " @") {
+          $line | parse "{_} @{pkg}@{ver}" | first | insert scoped true
+        } else {
+          $line | parse "{_} {pkg}@{ver}" | first | insert scoped false
+        }
+      }
   )
 
-  # Get wanted packages from argument, and parse to a table
+  # Get wanted packages from argument, and parse to a table.
+  # Supports: <pkg>, <pkg>@<ver>, @<pkg>, @<pkg>@<ver>
   let wanted = (
     $wanted_pkgs_str
     | str trim
     | split row " "
-    | each {
-      split row "@"
-      | compact -e
-      | { pkg: $in.0, ver: $in.1? }
-    }
+    | each {|entry|
+        let scoped = ($entry | str starts-with "@")
+        let parts = ($entry | split row "@" | compact -e)
+        { scoped: $scoped, pkg: $parts.0, ver: ($parts | get --optional 1) }
+      }
   )
 
   # Find packages to install (in wanted but not in installed).
@@ -34,12 +48,10 @@ def main [
     # Filter packages with version mismatch
     | where $it.ver != ($installed | where pkg == $it.pkg | get 0.ver)
   )
-  let install_table = $not_installed | append $ver_mismatch
   let install_list = (
-    $install_table
-    | each {
-      if $in.ver != null { $"@($in.pkg)@($in.ver)" } else { $"@($in.pkg)" }
-    }
+    $not_installed
+    | append $ver_mismatch
+    | each { pkg_to_str }
   )
 
   if not ($install_list | is-empty) {
@@ -48,8 +60,11 @@ def main [
   }
 
   # Find packages to remove (in installed but not in wanted).
-  let remove_table = $installed | where $it.pkg not-in $wanted.pkg
-  let remove_list = $remove_table | each { $"@($in.pkg)" }
+  let remove_list = (
+    $installed
+    | where $it.pkg not-in $wanted.pkg
+    | each { pkg_to_str }
+  )
 
   if not ($remove_list | is-empty) {
     print $"Removing npm packages: ($remove_list)"
