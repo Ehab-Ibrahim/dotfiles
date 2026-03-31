@@ -25,7 +25,11 @@
   # Enables for stylix
   programs.bat.enable = true;
   programs.fzf.enable = true;
-  programs.yazi.enable = true;
+  programs.yazi = {
+    enable = true;
+    # Compatibility due to home stateVersion mismatch
+    shellWrapperName = "y";
+  };
 
   # Btop
   programs.btop = {
