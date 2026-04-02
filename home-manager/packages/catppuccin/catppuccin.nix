@@ -41,6 +41,9 @@ in {
     function reload-theme --on-variable _reload_theme
       eval (rg -N "^fish_config theme choose .+" ~/.config/fish/config.fish)
     end
+
+    # Restore valid path underline highlight (catppuccin theme resets this to empty)
+    set -g fish_color_valid_path --underline
   '';
 
   # Manually change Helix, Zellij, and Neovim themes on activation
