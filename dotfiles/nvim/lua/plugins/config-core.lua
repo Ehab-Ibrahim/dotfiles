@@ -33,6 +33,10 @@ return {
     },
   },
 
+  { "mason-org/mason-lspconfig.nvim", enabled = false },
+  { "mason-org/mason.nvim", enabled = false },
+  { "jay-babu/mason-nvim-dap.nvim", enabled = false },
+
   {
     "neovim/nvim-lspconfig",
     opts = {
@@ -41,12 +45,8 @@ return {
         virtual_text = false,
       },
       servers = {
-        clangd = { mason = false },
-        ruff = { mason = false },
-        pyright = { mason = false },
-        nil_ls = { mason = false },
+        tombi = {},
         basedpyright = {
-          mason = false,
           settings = {
             basedpyright = {
               analysis = {
@@ -61,7 +61,6 @@ return {
           },
         },
         svlangserver = {
-          mason = false,
           settings = {
             systemverilog = {
               launchConfiguration = "verilator -sv -Wall --lint-only --timing",
@@ -80,7 +79,6 @@ return {
         },
         verible = {
           cmd = { "verible-verilog-ls", "--ruleset", "all" },
-          mason = false,
           on_attach = function(client, bufnr)
             -- Workaround for fixing double diagnostics for Verible
             -- https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textDocument_pullDiagnostics

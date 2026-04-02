@@ -36,6 +36,7 @@ in {
     clangdStandalone
     nil
     ruff
+    tombi
     tree-sitter
     verible
     verilator
