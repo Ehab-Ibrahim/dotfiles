@@ -34,6 +34,8 @@ in {
     alejandra
     basedpyright
     clangdStandalone
+    markdownlint-cli2
+    markdown-toc
     nil
     ruff
     tombi
