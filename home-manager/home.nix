@@ -24,7 +24,6 @@
     ./packages/nomachine.nix
     ./packages/quodlibet.nix
     ./packages/ssh
-    ./packages/teams.nix
     ./packages/terminals
   ];
 }
