@@ -42,6 +42,7 @@
       system ? "x86_64-linux",
       username ? "eibrahim",
       use-nixgl ? true,
+      homeFile ? "home.nix",
     }: let
       vars = {inherit system username use-nixgl;};
       secrets = inputs.secrets;
@@ -51,7 +52,7 @@
         extraSpecialArgs = {inherit inputs outputs secrets vars;};
         modules = [
           inputs.catppuccin.homeModules.catppuccin
-          ./home-manager/home.nix
+          ./home-manager/${homeFile}
         ];
       };
   in {
@@ -70,6 +71,7 @@
     homeConfigurations = {
       "eibrahim@nixos" = mkHome {use-nixgl = false;};
       "eibrahim@popos" = mkHome {};
+      "eibrahim@wsl" = mkHome {use-nixgl = false; homeFile = "wsl.nix";};
     };
   };
 }
