@@ -12,27 +12,26 @@ in {
     settings = {
       email = secrets.gmail;
       lock_timeout = 4 * 3600;
-      pinentry = pkgs.pinentry-gnome3;
+      pinentry = pkgs.pinentry-qt;
     };
   };
 
   systemd.user.services.rbw-agent = {
     Unit = {
       Description = "rbw SSH agent";
-      PartOf = ["graphical-session.target"];
-      After = ["graphical-session.target"];
+      After = ["default.target"];
     };
     Service = {
       Type = "forking";
       ExecStart = "${pkgs.rbw}/bin/rbw login";
       Restart = "on-failure";
-      Environment = ''
-        PATH=${lib.makeBinPath [pkgs.rbw pkgs.pinentry-gnome3]}
-      '';
+      Environment = [
+        "PATH=${lib.makeBinPath [pkgs.rbw pkgs.pinentry-qt]}"
+      ];
       PIDFile = "%t/rbw/pidfile";
     };
     Install = {
-      WantedBy = ["graphical-session.target"];
+      WantedBy = ["default.target"];
     };
   };
 
