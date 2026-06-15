@@ -19,7 +19,6 @@ in {
   systemd.user.services.rbw-agent = {
     Unit = {
       Description = "rbw SSH agent";
-      After = ["default.target"];
     };
     Service = {
       Type = "forking";
@@ -29,6 +28,20 @@ in {
         "PATH=${lib.makeBinPath [pkgs.rbw pkgs.pinentry-qt]}"
       ];
       PIDFile = "%t/rbw/pidfile";
+    };
+    Install = {
+      # Start after graphical-session.target so DISPLAY is already imported into
+      # the systemd environment before the agent forks.
+      WantedBy = ["graphical-session.target"];
+    };
+  };
+
+  # Fallback for WSL and headless servers where graphical-session.target never
+  # activates. Fires 5s after the user session starts.
+  systemd.user.timers.rbw-agent = {
+    Timer = {
+      OnActiveSec = "5s";
+      RemainAfterElapse = false;
     };
     Install = {
       WantedBy = ["default.target"];
