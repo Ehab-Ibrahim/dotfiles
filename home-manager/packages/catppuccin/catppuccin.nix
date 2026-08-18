@@ -13,7 +13,10 @@
   flavor = config.catppuccin.flavor;
 in {
   catppuccin = {
+    enable = true;
+    autoEnable = false;
     flavor = lib.mkDefault "macchiato";
+    cache.enable = true;
 
     # Targets
     alacritty.enable = true;
@@ -35,8 +38,8 @@ in {
   # Fish function to reload theme
   programs.fish.interactiveShellInit = ''
     # FZF colors are set in hm_session_vars, and it's only sourced once per session
-    # Override FZF_DEFAULT_OPTS value in our fish config to force color update
-    set -gx FZF_DEFAULT_OPTS '${config.home.sessionVariables.FZF_DEFAULT_OPTS}'
+    # Override FZF_DEFAULT_OPTS_FILE value in our fish config to force color update
+    set -gx FZF_DEFAULT_OPTS_FILE '${config.home.sessionVariables.FZF_DEFAULT_OPTS_FILE}'
 
     function reload-theme --on-variable _reload_theme
       eval (rg -N "^fish_config theme choose .+" ~/.config/fish/config.fish)

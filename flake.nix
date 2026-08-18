@@ -17,12 +17,12 @@
     nixgl.inputs.nixpkgs.follows = "nixpkgs";
 
     # Catppuccin
+    # No nixpkgs.follows: keeps cache hits from catppuccin.cachix.org
     catppuccin.url = "github:catppuccin/nix";
-    catppuccin.inputs.nixpkgs.follows = "nixpkgs";
 
     # Helix editor
+    # No nixpkgs.follows: keeps cache hits from helix.cachix.org
     helix.url = "github:helix-editor/helix";
-    helix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {

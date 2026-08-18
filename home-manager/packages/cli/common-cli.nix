@@ -41,8 +41,8 @@
       navigate = true;
     };
   };
-  programs.lazygit.settings.git.pagers = [
-    {pager = "delta --paging=never";}
+  programs.lazygit.settings.git.diffRenderers = [
+    {command = "delta --paging=never";}
   ];
 
   # Direnv
