@@ -1,52 +1,27 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}: let
-  rbwSocket = "$XDG_RUNTIME_DIR/rbw/ssh-agent-socket";
-
-  nomachineWrapper = pkgs.writeShellApplication {
-    name = "nomachine-wrapper.sh";
-    runtimeInputs = [pkgs.systemdMinimal];
-    text = ''
-      # Path to RBW Socket
-      RBW_SOCK="${rbwSocket}"
-
-      # Check if the RBW agent service is running
-      if systemctl --user is-active --quiet rbw-agent.service; then
-        # If yes, point NoMachine to RBW
-        export SSH_AUTH_SOCK="$RBW_SOCK"
-        echo "RBW Agent found and active!" | systemd-cat -t nomachine-wrapper
-      else
-        echo "RBW Agent not found or not responding." | systemd-cat -t nomachine-wrapper
-      fi
-
-      echo "Using: $SSH_AUTH_SOCK" | systemd-cat -t nomachine-wrapper
-
-      # Launch NoMachine Player
-      exec ${pkgs.nomachine-client}/bin/nxplayer "$@"
-    '';
-  };
-
-  nomachineWrapperWithNixGL = config.lib.gui-apps.wrapApp nomachineWrapper;
-  nomachineWrapperPath = "${nomachineWrapperWithNixGL}/bin/nomachine-wrapper.sh";
-
-  # Create a custom package with symlinks to the original package
-  # Modify the .desktop files of the custom package to use the wrapper script
-  # Wrap nomachineWrapper with NixGL for GPU acceleration
-  nomachine-custom = pkgs.symlinkJoin {
-    name = "nomachine-client-custom";
-    paths = [pkgs.nomachine-client];
-    postBuild = ''
-      cd $out/share/applications
-      for f in *.desktop; do
-        cp --remove-destination "$(readlink -f "$f")" "$f"
-        sed -i 's|/nix/store/[^"]*/bin/nxplayer|${nomachineWrapperPath}|g' "$f"
-      done
-    '';
-  };
+{lib, ...}: let
+  rbwRuntimeDir = "$XDG_RUNTIME_DIR/rbw";
+  rbwSocket = "${rbwRuntimeDir}/ssh-agent-socket";
+  flatpakAppId = "com.nomachine.nxplayer";
+  # Activation scripts have no /usr/bin on PATH.
+  flatpakBin = "/usr/bin/flatpak";
 in {
-  # NoMachine
-  home.packages = [nomachine-custom];
+  # Installed via Flathub, not nixpkgs: nixpkgs pins a vendor tarball URL that
+  # NoMachine removes on every release, breaking `nix flake update`.
+  home.activation.installNomachineFlatpak = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    # gpg/gpgconf (needed by flatpak's GPGME) also live in /usr/bin.
+    export PATH="/usr/bin:/bin:$PATH"
+    if ! ${flatpakBin} info --user ${flatpakAppId} &>/dev/null; then
+      verboseEcho "Installing NoMachine client (${flatpakAppId}) via Flatpak"
+      run ${flatpakBin} install --user --noninteractive flathub ${flatpakAppId}
+    fi
+
+    # Point the app at RBW's ssh-agent, bypassing Flatpak's ssh-auth socket
+    # passthrough (which would otherwise bind whatever agent the desktop
+    # session already exports, e.g. gcr-ssh-agent).
+    if systemctl --user is-active --quiet rbw-agent.service; then
+      run ${flatpakBin} override --user --nosocket=ssh-auth ${flatpakAppId}
+      run ${flatpakBin} override --user --filesystem="${rbwRuntimeDir}:ro" ${flatpakAppId}
+      run ${flatpakBin} override --user --env=SSH_AUTH_SOCK="${rbwSocket}" ${flatpakAppId}
+    fi
+  '';
 }
