@@ -11,7 +11,7 @@
 "dotfiles/ssh" = "~/.ssh/config"
 "dotfiles/zellij" = "~/.config/zellij/"
 "dotfiles/lazygit.yml" = "~/.config/lazygit/config.yml"
-"dotfiles/pixi-global.toml" = "~/.pixi/manifests/pixi-global.toml"
+"dotfiles/mise/config.toml" = "~/.config/mise/config.toml"
 
 [git.files]
 "dotfiles/gitconfig/config" = "~/.config/git/config"

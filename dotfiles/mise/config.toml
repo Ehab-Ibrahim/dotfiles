@@ -1,0 +1,46 @@
+# Global tools, ported from pixi-global.toml.
+# Explicit backends (aqua/github/npm) are used: they install upstream,
+# relocatable release archives.
+
+[tools]
+# Runs the npm packages below; the postinstall hook links it as `node`
+bun = "latest"
+
+"aqua:BurntSushi/ripgrep" = "latest"
+"aqua:jesseduffield/lazygit" = "latest"
+"aqua:direnv/direnv" = "latest"
+"aqua:junegunn/fzf" = "latest"
+"aqua:starship/starship" = "latest"
+"aqua:ajeetdsouza/zoxide" = "latest"
+"aqua:sharkdp/bat" = "latest"
+"aqua:aristocratos/btop" = "latest"
+"github:chipsalliance/verible" = "latest"
+"aqua:neovim/neovim" = "latest"
+"aqua:eza-community/eza" = "latest"
+"aqua:bootandy/dust" = "latest"
+"aqua:zellij-org/zellij" = "latest"
+"aqua:helix-editor/helix" = "latest"
+"aqua:astral-sh/ruff" = "latest"
+# musl builds: the gnu builds need glibc > 2.34 (RHEL 9)
+"github:nushell/nushell" = { version = "latest", asset_pattern = "nu-*-x86_64-unknown-linux-musl.tar.gz" }
+"aqua:fish-shell/fish-shell" = "latest"
+"aqua:sharkdp/fd" = "latest"
+"aqua:dandavison/delta" = "latest"
+"github:sxyazi/yazi" = { version = "latest", asset_pattern = "yazi-x86_64-unknown-linux-musl.zip" }
+"aqua:astral-sh/uv" = "latest"
+"aqua:tombi-toml/tombi" = "latest"
+"github:SuperCuber/dotter" = "latest"
+"github:clangd/clangd" = { version = "latest", asset_pattern = "clangd-linux-*.zip" }
+# Static builds; clang-format 20 is the newest one
+"github:muttleyxd/clang-tools-static-binaries" = { version = "latest", asset_pattern = "clang-format-20_linux-amd64", bin = "clang-format" }
+"npm:basedpyright" = "latest"
+"npm:markdownlint-cli2" = "latest"
+"npm:@imc-trading/svlangserver" = "latest"
+
+[settings]
+# The default npm installer (aube) fails to lock its store on NFS.
+npm.package_manager = "bun"
+
+[hooks]
+# npm packages start with `#!/usr/bin/env node`; bun acts as node under that name
+postinstall = "ln -sfn ~/.local/share/mise/installs/bun/latest/bin/bun ~/.local/bin/node"
