@@ -20,27 +20,26 @@ if status is-interactive
   end
 
   fzf_configure_bindings --directory=\co
-  {{#if (is_executable "starship")}}
-  starship init fish | source
-  {{/if}}
-  {{#if (is_executable "zoxide")}}
-  zoxide init fish | source
-  {{/if}}
-  {{#if (is_executable "eza")}}
-  alias eza 'eza --icons auto --color auto --git --header --group'
-  alias la 'eza -a'
-  alias ll 'eza -l'
-  alias lla 'eza -la'
-  alias ls eza
-  alias lt 'eza --tree'
-  {{/if}}
-
-  {{#if (is_executable "direnv")}}
-  # Hook direnv to shell
-  if set -q DIRENV_DIR && begin; set -q ZELLIJ || set -q NVIM; end
-      set -e (set -n | grep DIRENV_)
+  if command -q starship
+    starship init fish | source
   end
-  direnv hook fish | source
+  if command -q zoxide
+    zoxide init fish | source
+  end
+  if command -q eza
+    alias eza 'eza --icons auto --color auto --git --header --group'
+    alias la 'eza -a'
+    alias ll 'eza -l'
+    alias lla 'eza -la'
+    alias ls eza
+    alias lt 'eza --tree'
+  end
 
-  {{/if}}
+  if command -q direnv
+    # Hook direnv to shell
+    if set -q DIRENV_DIR && begin; set -q ZELLIJ || set -q NVIM; end
+      set -e (set -n | grep DIRENV_)
+    end
+    direnv hook fish | source
+  end
 end

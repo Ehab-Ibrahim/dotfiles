@@ -1,8 +1,7 @@
-{{#if (is_executable "delta")}}
 git:
-  pagers:
-    - pager: delta --paging=never
-{{/if}}
+  diffRenderers:
+    # Fall back to plain git output until mise installs delta
+    - name: delta
+      command: command -v delta >/dev/null && delta --paging=never || cat
 update:
   method: never
-
