@@ -1,13 +1,13 @@
 [user]
-    email = {{email}}
-    name = {{name}}
-    signingkey = {{git_signing_key}}
+    email = e.m.ibrahim@outlook.com
+    name = Ehab Ibrahim
+    signingkey = key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIICue7k+YhwVJinX1QZQH6gtUfX2VJ98Ho/ptS6YMrtG
 [commit]
 	gpgsign = true
 [gpg]
 	format = "ssh"
 [gpg "ssh"]
-	allowedSignersFile = "/home/{{username}}/.config/git/allowed_signers"
+	allowedSignersFile = ~/.config/git/allowed_signers
 [pull]
     ff = true
     rebase = true
@@ -23,3 +23,6 @@
     conflictstyle = diff3
 [diff]
     colorMoved = default
+# Machine-specific overrides (e.g. a work email); must stay last so its values win
+[include]
+    path = ~/.config/git/local
