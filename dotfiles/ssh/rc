@@ -1,5 +1,10 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
+# Point a stable, per-host link at a live forwarded agent, so shells and
+# zellij panes outlive the connection they started in. /home is shared over
+# NFS, and a connection's socket dies with it: only repoint a dead link
+link="$HOME/.ssh/agent-$(uname -n).sock"
 if [ -n "$SSH_AUTH_SOCK" ]; then
-    ln -sf "$SSH_AUTH_SOCK" "$HOME/.ssh/agent.sock"
+    SSH_AUTH_SOCK="$link" ssh-add -l >/dev/null 2>&1
+    [ $? -eq 2 ] && ln -sf "$SSH_AUTH_SOCK" "$link"
 fi
