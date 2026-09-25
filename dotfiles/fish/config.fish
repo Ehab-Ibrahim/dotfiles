@@ -43,9 +43,4 @@ if status is-interactive
   direnv hook fish | source
 
   {{/if}}
-  {{#if (is_executable "uv")}}
-  uv generate-shell-completion fish | source
-  uvx --generate-shell-completion fish | source
-
-  {{/if}}
 end
