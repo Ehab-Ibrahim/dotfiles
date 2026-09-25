@@ -8,8 +8,8 @@ if status is-interactive
     set -x SSH_AUTH_SOCK $agent_sock
   end
 
-  # Add mise tools
-  fish_add_path -g (mise bin-paths)
+  # Add mise tools; cached by the mise postinstall hook, as `mise bin-paths` costs ~50ms
+  fish_add_path -g (cat ~/.cache/fish/mise-bin-paths 2>/dev/null; or mise bin-paths)
   # Fallback for tools installed after this shell started
   fish_add_path -g -a ~/.local/share/mise/shims
 

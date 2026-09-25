@@ -51,5 +51,11 @@ uvx --generate-shell-completion fish > "$dir/uvx.fish"
 npm.package_manager = "bun"
 
 [hooks]
-# npm packages start with `#!/usr/bin/env node`; bun acts as node under that name
-postinstall = "ln -sfn ~/.local/share/mise/installs/bun/latest/bin/bun ~/.local/bin/node"
+# npm packages start with `#!/usr/bin/env node`; bun acts as node under that name.
+# Also caches `mise bin-paths` for config.fish; written only on success so a
+# failure never leaves an empty cache
+postinstall = '''
+ln -sfn ~/.local/share/mise/installs/bun/latest/bin/bun ~/.local/bin/node
+mkdir -p ~/.cache/fish
+mise bin-paths > ~/.cache/fish/mise-bin-paths.tmp && mv ~/.cache/fish/mise-bin-paths.tmp ~/.cache/fish/mise-bin-paths
+'''
