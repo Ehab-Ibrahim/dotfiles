@@ -13,8 +13,13 @@
 "dotfiles/mise/config.toml" = "~/.config/mise/config.toml"
 
 [git.files]
-"dotfiles/gitconfig/config" = "~/.config/git/config"
-"dotfiles/gitconfig/allowed_signers" = "~/.config/git/allowed_signers"
+"dotfiles/gitconfig/entry" = "~/.config/git/config"
+"dotfiles/gitconfig/config" = "~/.config/git/eibrahim/config"
+"dotfiles/gitconfig/allowed_signers" = "~/.config/git/eibrahim/allowed_signers"
+
+[git.variables]
+# Set to a directory (without a trailing /) to use this config only in repos under it
+git_workdir = ""
 
 [ssh.files]
 "dotfiles/ssh/config" = "~/.ssh/config"

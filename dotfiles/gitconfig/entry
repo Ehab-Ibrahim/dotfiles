@@ -1,0 +1,6 @@
+{{#if git_workdir}}
+[includeIf "gitdir:{{git_workdir}}/"]
+{{else}}
+[include]
+{{/if}}
+    path = eibrahim/config
