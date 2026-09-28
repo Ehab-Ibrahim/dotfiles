@@ -3,7 +3,7 @@ if status is-interactive
   fish_add_path -g ~/bin/
   fish_add_path -g ~/.local/bin/
 
-  set -l agent_sock $HOME/.ssh/agent-$hostname.sock
+  set -l agent_sock $HOME/.ssh/agent-eibrahim-$hostname.sock
   if test -S $agent_sock
     set -x SSH_AUTH_SOCK $agent_sock
   end

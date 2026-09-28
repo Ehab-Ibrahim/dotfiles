@@ -1,10 +1,23 @@
 #!/bin/sh
 
-# Point a stable, per-host link at a live forwarded agent, so shells and
-# zellij panes outlive the connection they started in. /home is shared over
-# NFS, and a connection's socket dies with it: only repoint a dead link
-link="$HOME/.ssh/agent-$(uname -n).sock"
-if [ -n "$SSH_AUTH_SOCK" ]; then
+# This file replaces sshd's own xauth step, so add the X11 cookie here
+# (from sshd(8)); the home may be shared with others who use `ssh -X`
+if read proto cookie && [ -n "$DISPLAY" ]; then
+    if [ "$(echo "$DISPLAY" | cut -c1-10)" = 'localhost:' ]; then
+        # X11UseLocalhost=yes
+        echo add "unix:$(echo "$DISPLAY" | cut -c11-)" "$proto" "$cookie"
+    else
+        # X11UseLocalhost=no
+        echo add "$DISPLAY" "$proto" "$cookie"
+    fi | xauth -q -
+fi
+
+# Point a stable, per-host link at a live forwarded agent, so shells outlive
+# the connection they started in; only repoint a dead link. The home may be
+# shared between people, so only link an agent that holds my signing key
+key=$(git config --file ~/.config/git/eibrahim/config user.signingkey 2>/dev/null | cut -d' ' -f2)
+link="$HOME/.ssh/agent-eibrahim-$(uname -n).sock"
+if [ -n "$key" ] && [ -n "$SSH_AUTH_SOCK" ] && ssh-add -L 2>/dev/null | grep -qF "$key"; then
     SSH_AUTH_SOCK="$link" ssh-add -l >/dev/null 2>&1
     [ $? -eq 2 ] && ln -sf "$SSH_AUTH_SOCK" "$link"
 fi
