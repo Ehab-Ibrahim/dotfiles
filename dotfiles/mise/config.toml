@@ -59,4 +59,10 @@ postinstall = '''
 ln -sfn ~/.local/share/mise/installs/bun/latest/bin/bun ~/.local/bin/node
 mkdir -p ~/.cache/fish
 mise bin-paths > ~/.cache/fish/mise-bin-paths.tmp && mv ~/.cache/fish/mise-bin-paths.tmp ~/.cache/fish/mise-bin-paths
+fish -c '
+  if not type -q fisher
+    curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
+    and fisher update
+  end
+'
 '''
