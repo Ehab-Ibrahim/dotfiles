@@ -174,11 +174,11 @@
     },
     "secrets": {
       "locked": {
-        "lastModified": 1767087548,
-        "narHash": "sha256-syJ88XQD+CR/Z2xXi7oaujzsrEC7aLSHcbaID/JIgEA=",
+        "lastModified": 1790350978,
+        "narHash": "sha256-WulZS/IQq/Ax+knoEx6JprIS7R570bXuR9jZEhYzsBw=",
         "ref": "refs/heads/master",
-        "rev": "25b4ef4bbd9787d88d3e5eb8221cccf8b8bcc384",
-        "revCount": 1,
+        "rev": "289f0a68bdeae63bf7283888112b2b7dce5cc4d7",
+        "revCount": 3,
         "type": "git",
         "url": "ssh://git@github.com/Ehab-Ibrahim/secrets.git"
       },
