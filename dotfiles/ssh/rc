@@ -13,11 +13,9 @@ if read proto cookie && [ -n "$DISPLAY" ]; then
 fi
 
 # Point a stable, per-host link at a live forwarded agent, so shells outlive
-# the connection they started in; only repoint a dead link. The home may be
-# shared between people, so only link an agent that holds my signing key
+# the connection they started in; only repoint a link that cannot sign. The home
+# may be shared between people, so only link an agent that holds my signing key
 key=$(git config --file ~/.config/git/eibrahim/config user.signingkey 2>/dev/null | cut -d' ' -f2)
 link="$HOME/.ssh/agent-eibrahim-$(uname -n).sock"
-if [ -n "$key" ] && [ -n "$SSH_AUTH_SOCK" ] && ssh-add -L 2>/dev/null | grep -qF "$key"; then
-    SSH_AUTH_SOCK="$link" ssh-add -l >/dev/null 2>&1
-    [ $? -eq 2 ] && ln -sf "$SSH_AUTH_SOCK" "$link"
-fi
+has_key() { [ -n "$key" ] && SSH_AUTH_SOCK=$1 ssh-add -L 2>/dev/null | grep -qF "$key"; }
+has_key "$SSH_AUTH_SOCK" && ! has_key "$link" && ln -sfn "$SSH_AUTH_SOCK" "$link"
