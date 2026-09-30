@@ -71,7 +71,7 @@
     homeConfigurations = {
       "eibrahim@nixos" = mkHome {use-nixgl = false;};
       "eibrahim@popos" = mkHome {};
-      "eibrahim@wsl" = mkHome {use-nixgl = false; homeFile = "wsl.nix";};
+      "eibrahim@magics-ehab" = mkHome {use-nixgl = false; homeFile = "wsl.nix";};
     };
   };
 }
