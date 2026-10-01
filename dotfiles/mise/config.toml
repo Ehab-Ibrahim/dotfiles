@@ -37,6 +37,7 @@ bun = "latest"
 "npm:basedpyright" = "latest"
 "npm:markdownlint-cli2" = "latest"
 "npm:@imc-trading/svlangserver" = "latest"
+"aqua:anthropics/claude-code" = "latest"
 
 [tools."aqua:astral-sh/uv"]
 version = "latest"
