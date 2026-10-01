@@ -17,5 +17,5 @@ fi
 # may be shared between people, so only link an agent that holds my signing key
 key=$(git config --file ~/.config/git/eibrahim/config user.signingkey 2>/dev/null | cut -d' ' -f2)
 link="$HOME/.ssh/agent-eibrahim-$(uname -n).sock"
-has_key() { [ -n "$key" ] && SSH_AUTH_SOCK=$1 ssh-add -L 2>/dev/null | grep -qF "$key"; }
+has_key() { [ -n "$key" ] && SSH_AUTH_SOCK=$1 timeout 2 ssh-add -L 2>/dev/null | grep -qF "$key"; }
 has_key "$SSH_AUTH_SOCK" && ! has_key "$link" && ln -sfn "$SSH_AUTH_SOCK" "$link"
