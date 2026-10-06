@@ -51,7 +51,6 @@
         pkgs = nixpkgs.legacyPackages.${system};
         extraSpecialArgs = {inherit inputs outputs secrets vars;};
         modules = [
-          inputs.catppuccin.homeModules.catppuccin
           ./home-manager/${homeFile}
         ];
       };
