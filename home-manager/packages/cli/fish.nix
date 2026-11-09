@@ -5,6 +5,14 @@
 }: {
   programs.fish = {
     enable = true;
+
+    # As a login shell, fish doesn't read ~/.profile, so load Nix's env here.
+    loginShellInit = ''
+      if test -e ${config.home.homeDirectory}/.nix-profile/etc/profile.d/nix.fish
+        source ${config.home.homeDirectory}/.nix-profile/etc/profile.d/nix.fish
+      end
+    '';
+
     shellAliases = {
       ".." = "cd ..";
       "..." = "cd ../..";
