@@ -44,8 +44,9 @@ in {
       "${config.home.homeDirectory}/.npm/global/bin"
     ];
 
-    # Activation script
-    home.activation.manageNpmPackages = ''
+    # After linkGeneration so ~/.npmrc exists; npm 11 `ls -g` fails without prefix/lib
+    home.activation.manageNpmPackages = lib.hm.dag.entryAfter ["linkGeneration"] ''
+      run mkdir -p "${config.home.homeDirectory}/.npm/global/lib"
       export PATH="${pkgs.nodejs_24}/bin/:$PATH"
       ${manageNpmScriptFile} ${lib.escapeShellArg npmPackagesStr}
     '';
