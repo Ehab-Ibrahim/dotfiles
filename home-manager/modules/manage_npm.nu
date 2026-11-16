@@ -38,11 +38,6 @@ def main [
     | each { if $in.ver != null { $"($in.pkg)@($in.ver)" } else { $in.pkg } }
   )
 
-  if not ($install_list | is-empty) {
-    print $"Installing npm packages: ($install_list)"
-    npm install -g ...$install_list
-  }
-
   # Find packages to remove (in installed but not in wanted).
   # npm uninstall does not accept name@version, only the package name.
   let remove_list = (
@@ -51,8 +46,15 @@ def main [
     | get pkg
   )
 
+  # Remove before installing: a replacement package that provides the same
+  # bin name (e.g. opencode-ai -> @opencode/cli) would otherwise not get linked.
   if not ($remove_list | is-empty) {
     print $"Removing npm packages: ($remove_list)"
     npm uninstall -g ...$remove_list
+  }
+
+  if not ($install_list | is-empty) {
+    print $"Installing npm packages: ($install_list)"
+    npm install -g ...$install_list
   }
 }
