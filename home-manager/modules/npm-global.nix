@@ -11,6 +11,9 @@ with lib; let
   # Convert to space-separated string for shell
   npmPackagesStr = concatStringsSep " " npmPackages;
 
+  # Package names without version: "@scope/pkg@1.2" -> "@scope/pkg"
+  npmPackageNames = map (p: head (builtins.match "(@?[^@]+)(@.*)?" p)) npmPackages;
+
   # Read the script content and write it to a file in the Nix store
   # Read the nushell script content
   manageNpmScriptContent = builtins.readFile ./manage_npm.nu;
@@ -35,9 +38,14 @@ in {
     home.packages = [pkgs.nodejs_24];
 
     # Set npm global prefix
-    home.file.".npmrc".text = ''
-      prefix=${config.home.homeDirectory}/.npm/global
-    '';
+    home.file.".npmrc".text =
+      ''
+        prefix=${config.home.homeDirectory}/.npm/global
+      ''
+      # Trust install scripts of every declared package (version suffix stripped)
+      + optionalString (npmPackages != []) ''
+        allow-scripts=${concatStringsSep "," npmPackageNames}
+      '';
 
     # Add npm global bin to PATH
     home.sessionPath = [
