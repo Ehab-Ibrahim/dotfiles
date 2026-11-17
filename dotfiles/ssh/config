@@ -5,3 +5,13 @@ Host github.com
     Hostname github.com
     User git
     PubKeyAuthentication yes
+
+Host horus
+    Hostname 192.168.0.4
+    User eibrahim
+    PubKeyAuthentication yes
+    # Disable QoS marking - makes ssh more reliable
+    IPQoS cs0 cs0
+    ServerAliveInterval 30
+    ServerAliveCountMax 3
+    ForwardAgent yes
