@@ -9,6 +9,10 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Declarative disk partitioning (horus)
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
+
     # Nix GL
     nixgl.url = "github:nix-community/nixGL";
     nixgl.inputs.nixpkgs.follows = "nixpkgs";
@@ -45,17 +49,20 @@
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
     nixosConfigurations = {
-      nixos = nixpkgs.lib.nixosSystem {
+      horus = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};
-        # > Our main nixos configuration file <
-        modules = [./nixos/configuration.nix];
+        modules = [
+          inputs.disko.nixosModules.disko
+          inputs.home-manager.nixosModules.home-manager
+          ./hosts/horus/disko.nix
+          ./hosts/horus/configuration.nix
+        ];
       };
     };
 
     # Standalone home-manager configuration entrypoint
     # Available through 'home-manager --flake .#your-username@your-hostname'
     homeConfigurations = {
-      "eibrahim@nixos" = mkHome {use-nixgl = false;};
       "eibrahim@popos" = mkHome {};
       "eibrahim@magics-ehab" = mkHome {use-nixgl = false; homeFile = "wsl.nix";};
     };
