@@ -1,13 +1,12 @@
 {
-  secrets,
   config,
   pkgs,
   ...
 }: let
   # A ControlMaster that survives suspend keeps a dead TCP connection, and new
   # sessions hang on it. Close every master (ControlPath ~/.ssh/cm-%C, set in
-  # magics_ssh) when logind announces sleep, and again on resume in case the
-  # first close lost the race against the freeze
+  # ~/.ssh/config.d/magics) when logind announces sleep, and again on resume in
+  # case the first close lost the race against the freeze
   ssh-mux-sleep = pkgs.writeShellApplication {
     name = "ssh-mux-sleep";
     runtimeInputs = [pkgs.glib pkgs.openssh pkgs.coreutils];
@@ -27,7 +26,6 @@
   };
 in {
   home.file.".ssh/config".source = config.dotfiles.symlink "ssh/config";
-  home.file.".ssh/config.d/magics".source = "${secrets}/magics_ssh";
 
   systemd.user.services.ssh-mux-sleep = {
     Unit = {

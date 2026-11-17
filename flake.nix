@@ -9,9 +9,6 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Secrets
-    secrets.url = "git+ssh://git@github.com/Ehab-Ibrahim/secrets.git";
-
     # Nix GL
     nixgl.url = "github:nix-community/nixGL";
     nixgl.inputs.nixpkgs.follows = "nixpkgs";
@@ -45,11 +42,10 @@
       homeFile ? "home.nix",
     }: let
       vars = {inherit system username use-nixgl;};
-      secrets = inputs.secrets;
     in
       home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.${system};
-        extraSpecialArgs = {inherit inputs outputs secrets vars;};
+        extraSpecialArgs = {inherit inputs outputs vars;};
         modules = [
           ./home-manager/${homeFile}
         ];

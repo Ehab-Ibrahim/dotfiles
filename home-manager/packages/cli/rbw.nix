@@ -1,9 +1,4 @@
-{
-  secrets,
-  pkgs,
-  lib,
-  ...
-}: let
+{pkgs, ...}: let
   rbwSocket = "$XDG_RUNTIME_DIR/rbw/ssh-agent-socket";
 
   # rbw-agent strips display vars from pinentry; re-read them from systemd at prompt time
@@ -19,7 +14,7 @@ in {
   programs.rbw = {
     enable = true;
     settings = {
-      email = secrets.gmail;
+      email = "hooba91@gmail.com";
       lock_timeout = 4 * 3600;
       pinentry = pinentry-rbw;
     };

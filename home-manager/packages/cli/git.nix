@@ -1,20 +1,21 @@
-{
-  secrets,
-  config,
-  ...
-}: {
+{config, ...}: let
+  name = "Ehab Ibrahim";
+  email = "e.m.ibrahim@outlook.com";
+  workEmail = "ehab.ibrahim@magics.tech";
+  signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIICue7k+YhwVJinX1QZQH6gtUfX2VJ98Ho/ptS6YMrtG";
+in {
   programs.git = {
     enable = true;
     settings = {
-      user.name = secrets.name;
-      user.email = secrets.outlook;
+      user.name = name;
+      user.email = email;
       merge.conflictstyle = "zdiff3";
       pull.ff = true;
       pull.rebase = true;
       # Configure signing commits with SSH
       gpg.format = "ssh";
       gpg.ssh.allowedSignersFile = "${config.xdg.configHome}/git/allowed_signers";
-      user.signingKey = "key::${secrets.git_signing_key}";
+      user.signingKey = "key::${signingKey}";
       commit.gpgsign = true;
     };
     includes = [
@@ -31,14 +32,14 @@
 
   home.file."projects/magics/.gitconfig".text = ''
     [user]
-        email = ${secrets.magics_mail}
+        email = ${workEmail}
   '';
   home.file."projects/ehab/.gitconfig".text = ''
     [user]
-        email = ${secrets.outlook}
+        email = ${email}
   '';
 
   xdg.configFile."git/allowed_signers".text = ''
-    ${secrets.outlook} ${secrets.git_signing_key}
+    ${email} ${signingKey}
   '';
 }

@@ -147,8 +147,7 @@
         "helix": "helix",
         "home-manager": "home-manager",
         "nixgl": "nixgl",
-        "nixpkgs": "nixpkgs_3",
-        "secrets": "secrets"
+        "nixpkgs": "nixpkgs_3"
       }
     },
     "rust-overlay": {
@@ -170,21 +169,6 @@
         "owner": "oxalica",
         "repo": "rust-overlay",
         "type": "github"
-      }
-    },
-    "secrets": {
-      "locked": {
-        "lastModified": 1790350978,
-        "narHash": "sha256-WulZS/IQq/Ax+knoEx6JprIS7R570bXuR9jZEhYzsBw=",
-        "ref": "refs/heads/master",
-        "rev": "289f0a68bdeae63bf7283888112b2b7dce5cc4d7",
-        "revCount": 3,
-        "type": "git",
-        "url": "ssh://git@github.com/Ehab-Ibrahim/secrets.git"
-      },
-      "original": {
-        "type": "git",
-        "url": "ssh://git@github.com/Ehab-Ibrahim/secrets.git"
       }
     },
     "systems": {
