@@ -1,13 +1,5 @@
-{
-  config,
-  inputs,
-  pkgs,
-  ...
-}: {
-  programs.helix = {
-    enable = true;
-    package = inputs.helix.packages.${pkgs.system}.default;
-  };
+{config, ...}: {
+  programs.helix.enable = true;
 
   # Symbolic links to dotfiles
   home.file.".config/helix".source = config.dotfiles.symlink "helix";

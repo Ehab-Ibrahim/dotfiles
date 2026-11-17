@@ -16,15 +16,6 @@
     # Catppuccin
     # No nixpkgs.follows: keeps cache hits from catppuccin.cachix.org
     catppuccin.url = "github:catppuccin/nix";
-
-    # Helix editor
-    # No nixpkgs.follows: keeps cache hits from helix.cachix.org
-    helix.url = "github:helix-editor/helix";
-  };
-
-  nixConfig = {
-    extra-substituters = ["https://helix.cachix.org"];
-    extra-trusted-public-keys = ["helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs="];
   };
 
   outputs = {
