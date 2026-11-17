@@ -12,6 +12,7 @@ Home server: Lenovo Y50-70 laptop, headless with the lid closed, wired Ethernet.
 | SSH | keys only; `IPQoS cs0 cs0` (the Wi-Fi AP stalled marked packets); keepalives every 30s |
 | Users | `eibrahim` (wheel, fish) with an initial password `changeme`; root has no password |
 | Docker | data in `/srv/docker` |
+| Tailscale | remote access; tailnet devices reach every port. After a reinstall: `sudo tailscale up` |
 | AdGuard Home | DNS on port 53, web UI on `http://horus:3000`; configured in the UI, stored in `/var/lib/AdGuardHome` (back it up before a reinstall) |
 | Nix | weekly GC of generations older than 14 days; `@wheel` trusted, so deploys from the PC work |
 | Home-manager | NixOS module, `home.nix`; dotfiles copied into the store (`dotfiles.mutable = false`), no repo clone needed |
