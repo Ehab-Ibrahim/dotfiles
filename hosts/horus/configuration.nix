@@ -64,6 +64,16 @@
   };
   systemd.services.docker.unitConfig.RequiresMountsFor = "/srv/docker";
 
+  # Adguard home for DNS ad-blocking
+  services.adguardhome = {
+    enable = true;
+    openFirewall = true; # web UI port
+  };
+  networking.firewall = {
+    allowedTCPPorts = [53];
+    allowedUDPPorts = [53];
+  };
+
   home-manager = {
     # Use the system's nixpkgs; install packages into /etc/profiles/per-user
     useGlobalPkgs = true;
