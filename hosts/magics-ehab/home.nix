@@ -1,5 +1,5 @@
-# This is your home-manager configuration file
-# Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
+# Standalone home-manager config for `magics-ehab` (WSL on Windows).
+# Deployed with `home-manager switch --flake .#eibrahim@magics-ehab`.
 {vars, ...}: {
   home = {
     username = vars.username;
@@ -19,12 +19,12 @@
   # You can import other home-manager modules here
   imports = [
     # Modules
-    ./modules
+    ../../home-manager/modules
     # Common nix and home-manager settings
-    ./home-settings.nix
+    ../../home-manager/home-settings.nix
     # Packages
-    ./packages/cli
-    ./packages/editors
-    ./packages/ssh
+    ../../home-manager/packages/cli
+    ../../home-manager/packages/editors
+    ../../home-manager/packages/ssh
   ];
 }

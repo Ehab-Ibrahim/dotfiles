@@ -27,10 +27,10 @@
     inherit (self) outputs;
     # Helper function to make a home-manager config
     mkHome = {
+      host,
       system ? "x86_64-linux",
       username ? "eibrahim",
       use-nixgl ? true,
-      homeFile ? "home.nix",
     }: let
       vars = {inherit system username use-nixgl;};
     in
@@ -38,7 +38,7 @@
         pkgs = nixpkgs.legacyPackages.${system};
         extraSpecialArgs = {inherit inputs outputs vars;};
         modules = [
-          ./home-manager/${homeFile}
+          ./hosts/${host}/home.nix
         ];
       };
   in {
@@ -59,8 +59,8 @@
     # Standalone home-manager configuration entrypoint
     # Available through 'home-manager --flake .#your-username@your-hostname'
     homeConfigurations = {
-      "eibrahim@fedora" = mkHome {};
-      "eibrahim@magics-ehab" = mkHome {use-nixgl = false; homeFile = "wsl.nix";};
+      "eibrahim@fedora" = mkHome {host = "fedora";};
+      "eibrahim@magics-ehab" = mkHome {host = "magics-ehab"; use-nixgl = false;};
     };
   };
 }
