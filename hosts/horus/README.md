@@ -36,7 +36,7 @@ NixOS minimal ISO on USB instead:
 From the PC: `nrh`, which runs
 
 ```
-nix run nixpkgs#nixos-rebuild -- switch --flake .#horus --target-host horus --sudo --ask-sudo-password --use-substitutes
+nixos-rebuild switch --flake .#horus --target-host horus --sudo --ask-sudo-password --use-substitutes
 ```
 
 If the NIC hangs (link up, no traffic), from the keyboard:

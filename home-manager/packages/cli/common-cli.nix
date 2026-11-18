@@ -13,7 +13,7 @@
     fd
     fzf
     lazygit
-    nh
+    nixos-rebuild
     nushell
     ripgrep
     starship

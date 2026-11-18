@@ -28,7 +28,7 @@
       hms.function = "__hms_expansion";
       ncg = "nix-collect-garbage";
       # Deploy horus from this machine
-      nrh = "nix run nixpkgs#nixos-rebuild -- switch --flake ${config.nixConfigRoot}#horus --target-host horus --sudo --ask-sudo-password --use-substitutes";
+      nrh = "nixos-rebuild switch --flake ${config.nixConfigRoot}#horus --target-host horus --sudo --ask-sudo-password --use-substitutes";
     };
 
     functions = {
