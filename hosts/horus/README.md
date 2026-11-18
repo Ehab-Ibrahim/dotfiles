@@ -13,7 +13,8 @@ Home server: Lenovo Y50-70 laptop, headless with the lid closed, wired Ethernet.
 | Users | `eibrahim` (wheel, fish) with an initial password `changeme`; root has no password |
 | Docker | data in `/srv/docker` |
 | Tailscale | remote access; tailnet devices reach every port. After a reinstall: `sudo tailscale up` |
-| AdGuard Home | DNS on port 53, web UI on `http://horus:3000`; configured in the UI, stored in `/var/lib/AdGuardHome` (back it up before a reinstall) |
+| AdGuard Home | DNS on port 53, web UI on port 3000; configured in the UI, stored in `/var/lib/AdGuardHome` (back it up before a reinstall) |
+| Caddy | Reverse proxy on port 80; `http://adguard.horus` -> `localhost:3000`, backed by AdGuard DNS rewrites |
 | Nix | weekly GC of generations older than 14 days; `@wheel` trusted, so deploys from the PC work |
 | Home-manager | NixOS module, `home.nix`; dotfiles copied into the store (`dotfiles.mutable = false`), no repo clone needed |
 
@@ -33,7 +34,7 @@ NixOS minimal ISO on USB instead:
 
 ## Deploy
 
-From the PC: `nrh`, which runs
+From the PC: `deploy-horus`, which runs
 
 ```
 nixos-rebuild switch --flake .#horus --target-host horus --sudo --ask-sudo-password --use-substitutes
