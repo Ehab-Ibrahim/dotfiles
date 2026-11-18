@@ -16,7 +16,6 @@
     # Common nix and home-manager settings
     ./home-settings.nix
     # Packages
-    ./packages/catppuccin
     ./packages/cli
     ./packages/drawio.nix
     ./packages/editors

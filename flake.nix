@@ -16,10 +16,6 @@
     # Nix GL
     nixgl.url = "github:nix-community/nixGL";
     nixgl.inputs.nixpkgs.follows = "nixpkgs";
-
-    # Catppuccin
-    # No nixpkgs.follows: keeps cache hits from catppuccin.cachix.org
-    catppuccin.url = "github:catppuccin/nix";
   };
 
   outputs = {
