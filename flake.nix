@@ -59,7 +59,7 @@
     # Standalone home-manager configuration entrypoint
     # Available through 'home-manager --flake .#your-username@your-hostname'
     homeConfigurations = {
-      "eibrahim@popos" = mkHome {};
+      "eibrahim@fedora" = mkHome {};
       "eibrahim@magics-ehab" = mkHome {use-nixgl = false; homeFile = "wsl.nix";};
     };
   };
