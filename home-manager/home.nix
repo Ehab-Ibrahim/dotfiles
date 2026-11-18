@@ -20,7 +20,6 @@
     ./packages/drawio.nix
     ./packages/editors
     ./packages/firefox.nix
-    ./packages/nomachine.nix
     ./packages/quodlibet.nix
     ./packages/ssh
     ./packages/terminals
