@@ -70,13 +70,10 @@
     openFirewall = true; # web UI port
   };
 
-  # Reverse proxy for local services; AdGuard's DNS rewrites point the hostnames
-  # here, so Caddy only has to forward them
+  # Reverse proxy: <service>.horus (AdGuard rewrite *.horus) to local ports
   services.caddy = {
     enable = true;
-    virtualHosts."http://adguard.horus".extraConfig = ''
-      reverse_proxy localhost:3000
-    '';
+    virtualHosts."http://adguard.horus".extraConfig = "reverse_proxy 127.0.0.1:3000";
   };
 
   networking.firewall = {
