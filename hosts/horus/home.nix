@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   imports = [
     ../../home-manager/settings/home-manager.nix
-    ../../home-manager/shell
+    ../../home-manager/shell/fish.nix
     ../../home-manager/tooling/common-cli.nix
     ../../home-manager/tooling/git.nix
     ../../home-manager/tooling/helix.nix
