@@ -30,7 +30,6 @@
     dontStrip = false;
   };
 in {
-  imports = [../modules/npm-global.nix];
   home.packages = with pkgs; [
     alejandra
     basedpyright
@@ -41,10 +40,5 @@ in {
     ruff
     tombi
     tree-sitter
-    verible
-    verilator
   ];
-
-  # Install svlangserver
-  home.npmGlobal.packages = ["@imc-trading/svlangserver"];
 }

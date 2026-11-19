@@ -29,6 +29,21 @@ return {
     opts = {
       formatters_by_ft = {
         nix = { "alejandra" },
+        verilog = { "verible" },
+        systemverilog = { "verible" },
+      },
+      formatters = {
+        -- slang-server doesn't format
+        verible = {
+          prepend_args = {
+            "--wrap_spaces=2",
+            "--column_limit=100",
+            "--port_declarations_alignment=align",
+            "--named_parameter_alignment=align",
+            "--named_port_alignment=align",
+            "--try_wrap_long_lines",
+          },
+        },
       },
     },
   },
@@ -60,33 +75,19 @@ return {
             },
           },
         },
-        svlangserver = {
-          settings = {
-            systemverilog = {
-              launchConfiguration = "verilator -sv -Wall --lint-only --timing",
-              -- In lua, \z escape character is used to ignore all whitespace
-              -- until the next non-whitespace character
-              formatCommand = "verible-verilog-format \z
-                --wrap_spaces 2 \z
-                --column_limit 100 \z
-                --port_declarations_alignment align \z
-                --named_parameter_alignment align \z
-                --named_port_alignment align \z
-                --try_wrap_long_lines \z
-              ",
-            },
-          },
-        },
+        -- Per-project settings (include dirs, a .f file list) go in .slang/server.json
+        slang_server = {},
         verible = {
-          cmd = { "verible-verilog-ls", "--ruleset", "all" },
+          -- instance-shadowing flags every `import pkg::item;` after the first as shadowing `pkg`
+          cmd = { "verible-verilog-ls", "--ruleset", "all", "--rules=-instance-shadowing" },
           on_attach = function(client, bufnr)
             -- Workaround for fixing double diagnostics for Verible
             -- https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textDocument_pullDiagnostics
             client.server_capabilities.diagnosticProvider = nil
-            -- Disable <go to definition> for Verible - Rely on SVlangserver for that
+            -- Disable <go to definition> for Verible - Rely on slang-server for that
             -- https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textDocument_definition
             client.server_capabilities.definitionProvider = false
-            -- Disable formatting - Rely on SVlangserver for that
+            -- Disable formatting - conform.nvim runs verible-verilog-format instead
             -- https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textDocument_formatting
             client.server_capabilities.documentFormattingProvider = false
           end,

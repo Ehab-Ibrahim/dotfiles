@@ -18,6 +18,7 @@
     ../../home-manager/settings
     ../../home-manager/shell
     ../../home-manager/tooling
+    ../../home-manager/hdl
     ../../home-manager/services
   ];
 }

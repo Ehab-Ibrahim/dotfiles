@@ -1,19 +1,11 @@
 [language-server.verible]
 command = "verible-verilog-ls"
-args = ["--ruleset", "all"]
+# instance-shadowing flags every `import pkg::item;` after the first as shadowing `pkg`
+args = ["--ruleset", "all", "--rules=-instance-shadowing"]
 
-[language-server.svlangserver.config.systemverilog]
-includeIndexing = ["*.{v,vh,sv,svh}", "**/*.{v,vh,sv,svh}"]
-launchConfiguration = "verilator -sv -Wall --lint-only --timing"
-formatCommand = """
-verible-verilog-format \
---wrap_spaces 2 \
---column_limit 100 \
---port_declarations_alignment align \
---named_parameter_alignment align \
---named_port_alignment align \
---try_wrap_long_lines \
-"""
+# Per-project settings (include dirs, a .f file list) go in .slang/server.json
+[language-server.slang-server]
+command = "slang-server"
 
 [language-server.basedpyright]
 command = "basedpyright-langserver"
@@ -29,9 +21,19 @@ language-servers = ["ruff", "basedpyright"]
 [[language]]
 name = "verilog"
 language-servers = [
-  "svlangserver",
+  "slang-server",
   { name = "verible", only-features = ["diagnostics"] }
 ]
+# slang-server doesn't format
+formatter = { command = "verible-verilog-format", args = [
+  "--wrap_spaces=2",
+  "--column_limit=100",
+  "--port_declarations_alignment=align",
+  "--named_parameter_alignment=align",
+  "--named_port_alignment=align",
+  "--try_wrap_long_lines",
+  "-",
+] }
 
 [[language]]
 name = "nix"

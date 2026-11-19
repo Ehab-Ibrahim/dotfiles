@@ -36,7 +36,8 @@ bun = "latest"
 "github:muttleyxd/clang-tools-static-binaries" = { version = "latest", asset_pattern = "clang-format-20_linux-amd64", bin = "clang-format" }
 "npm:basedpyright" = "latest"
 "npm:markdownlint-cli2" = "latest"
-"npm:@imc-trading/svlangserver" = "latest"
+# Needs glibc 2.27; the old-linux build is for older systems
+"github:hudson-trading/slang-server" = { version = "latest", asset_pattern = "slang-server-linux-x64.tar.gz" }
 "aqua:anthropics/claude-code" = "latest"
 
 [tools."aqua:astral-sh/uv"]
