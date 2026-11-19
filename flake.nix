@@ -16,6 +16,9 @@
     # Nix GL
     nixgl.url = "github:nix-community/nixGL";
     nixgl.inputs.nixpkgs.follows = "nixpkgs";
+
+    # AI agents; no `follows`, so its binary cache hits
+    llm-agents.url = "github:numtide/llm-agents.nix";
   };
 
   outputs = {
