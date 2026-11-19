@@ -3,6 +3,7 @@
   config,
   ...
 }: {
+  imports = [../modules/dotfiles.nix];
   programs.fish = {
     enable = true;
 
@@ -30,17 +31,6 @@
     };
 
     functions = {
-      # Deploy to horus, but avoid garbage collection cleaning build artifacts
-      # Force garbage collection by deleting ~/.cache/nix/horus-toplevel
-      deploy-horus = {
-        description = "Deploy horus, keeping the build as a GC root";
-        body = ''
-          set -l root ${config.home.homeDirectory}/.cache/nix/horus-toplevel
-          mkdir -p (dirname $root)
-          and nix build --out-link $root "${config.nixConfigRoot}#nixosConfigurations.horus.config.system.build.toplevel"
-          and nixos-rebuild switch --flake ${config.nixConfigRoot}#horus --target-host horus --sudo --ask-sudo-password --use-substitutes
-        '';
-      };
       __hms_expansion = ''
         set HMS "home-manager switch --flake ${config.nixConfigRoot}"
         set SPEC_PATH "${config.xdg.dataHome}/home-manager/specialisation"

@@ -30,6 +30,7 @@
     dontStrip = false;
   };
 in {
+  imports = [../modules/npm-global.nix];
   home.packages = with pkgs; [
     alejandra
     basedpyright

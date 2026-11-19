@@ -1,13 +1,10 @@
 {pkgs, ...}: {
   imports = [
-    # Modules
-    ../../home-manager/modules/dotfiles.nix
-
-    # Packages
-    ../../home-manager/packages/cli/common-cli.nix
-    ../../home-manager/packages/cli/fish.nix
-    ../../home-manager/packages/cli/git.nix
-    ../../home-manager/packages/editors/helix.nix
+    ../../home-manager/settings/home-manager.nix
+    ../../home-manager/shell
+    ../../home-manager/tooling/common-cli.nix
+    ../../home-manager/tooling/git.nix
+    ../../home-manager/tooling/helix.nix
   ];
 
   # Ship dotfiles with each deploy instead of linking into a ~/dotfiles clone

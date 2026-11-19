@@ -1,4 +1,5 @@
 {config, ...}: {
+  imports = [../modules/dotfiles.nix];
   programs.helix.enable = true;
 
   # Symbolic links to dotfiles

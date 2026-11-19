@@ -4,10 +4,8 @@
   home = {
     username = vars.username;
     homeDirectory = "/home/${vars.username}";
+    stateVersion = "26.05";
   };
-
-  # Wrap GUI apps using nixgl
-  home.gui-apps.nixgl-wrap = vars.use-nixgl;
 
   # WSLg provides a display but doesn't import it into the systemd user environment
   # the way a desktop display manager would — set it explicitly for all user services
@@ -16,15 +14,10 @@
     WAYLAND_DISPLAY = "wayland-0";
   };
 
-  # You can import other home-manager modules here
   imports = [
-    # Modules
-    ../../home-manager/modules
-    # Common nix and home-manager settings
-    ../../home-manager/home-settings.nix
-    # Packages
-    ../../home-manager/packages/cli
-    ../../home-manager/packages/editors
-    ../../home-manager/packages/ssh
+    ../../home-manager/settings
+    ../../home-manager/shell
+    ../../home-manager/tooling
+    ../../home-manager/services
   ];
 }

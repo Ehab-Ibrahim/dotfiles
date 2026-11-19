@@ -4,24 +4,14 @@
   home = {
     username = vars.username;
     homeDirectory = "/home/${vars.username}";
+    stateVersion = "26.05";
   };
 
-  # Wrap GUI apps using nixgl
-  home.gui-apps.nixgl-wrap = vars.use-nixgl;
-
-  # You can import other home-manager modules here
   imports = [
-    # Modules
-    ../../home-manager/modules
-    # Common nix and home-manager settings
-    ../../home-manager/home-settings.nix
-    # Packages
-    ../../home-manager/packages/cli
-    ../../home-manager/packages/drawio.nix
-    ../../home-manager/packages/editors
-    ../../home-manager/packages/firefox.nix
-    ../../home-manager/packages/quodlibet.nix
-    ../../home-manager/packages/ssh
-    ../../home-manager/packages/terminals
+    ../../home-manager/settings
+    ../../home-manager/shell
+    ../../home-manager/tooling
+    ../../home-manager/graphical
+    ../../home-manager/services
   ];
 }

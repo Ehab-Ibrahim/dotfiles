@@ -2,11 +2,12 @@
   imports = [
     ./ai.nix
     ./common-cli.nix
-    ./fish.nix
-    ./fonts.nix
     ./git.nix
+    ./helix.nix
+    ./nixos-deploy.nix
+    ./lsps.nix
+    ./neovim.nix
     ./pdf.nix
     ./python.nix
-    ./rbw.nix
   ];
 }

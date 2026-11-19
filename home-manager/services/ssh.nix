@@ -25,6 +25,7 @@
     '';
   };
 in {
+  imports = [../modules/dotfiles.nix];
   home.file.".ssh/config".source = config.dotfiles.symlink "ssh/config";
 
   systemd.user.services.ssh-mux-sleep = {

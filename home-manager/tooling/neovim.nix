@@ -3,6 +3,7 @@
   pkgs,
   ...
 }: {
+  imports = [../modules/dotfiles.nix];
   programs.neovim.enable = true;
   # Avoid conflicting with our own recursive nvim symlink below
   programs.neovim.sideloadInitLua = true;

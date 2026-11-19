@@ -3,6 +3,7 @@
   pkgs,
   ...
 }: {
+  imports = [../modules/dotfiles.nix];
   home.packages = with pkgs; [
     bat
     btop
@@ -13,8 +14,6 @@
     fd
     fzf
     lazygit
-    nixos-rebuild
-    nushell
     ripgrep
     starship
     yazi

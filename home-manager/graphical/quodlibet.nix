@@ -3,6 +3,7 @@
   pkgs,
   ...
 }: {
+  imports = [../modules/dotfiles.nix];
   home.packages = [
     pkgs.quodlibet-full
   ];

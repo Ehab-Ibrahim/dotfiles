@@ -3,6 +3,7 @@
   lib,
   config,
   pkgs,
+  vars ? {},
   ...
 }: let
   cfg = config.home.gui-apps;
@@ -31,10 +32,11 @@ in {
   options.home.gui-apps = {
     nixgl-wrap = lib.mkOption {
       type = lib.types.bool;
-      default = false;
+      default = vars.use-nixgl or false;
       description = ''
         Whether to wrap GUI apps with nixGL.
         If false, GUI apps are installed directly.
+        Defaults to `vars.use-nixgl` for standalone hosts.
       '';
     };
 

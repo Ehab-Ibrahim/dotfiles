@@ -34,8 +34,8 @@ in {
   };
 
   config = {
-    # Ensure Node.js 24 is installed
-    home.packages = [pkgs.nodejs_24];
+    # Ensure Node.js 24 and nushell (which runs manage_npm.nu) are installed
+    home.packages = [pkgs.nodejs_24 pkgs.nushell];
 
     # Set npm global prefix
     home.file.".npmrc".text =

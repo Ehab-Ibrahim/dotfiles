@@ -4,6 +4,8 @@
   lib,
   ...
 }: {
+  imports = [../modules/gui-apps.nix];
+
   programs.alacritty = {
     enable = true;
     package = config.lib.gui-apps.wrapApp pkgs.alacritty;
