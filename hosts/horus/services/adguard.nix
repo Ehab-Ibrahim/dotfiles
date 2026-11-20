@@ -1,4 +1,4 @@
-# AdGuard Home: DNS ad-blocking and the local *.horus rewrites.
+# AdGuard Home: DNS ad-blocking; local *.hooba.be resolution is set in its UI.
 {...}: {
   services.adguardhome = {
     enable = true;
@@ -6,7 +6,10 @@
   };
 
   # Vhost lives here so disabling AdGuard also drops its reverse proxy.
-  services.caddy.virtualHosts."http://adguard.horus".extraConfig = "reverse_proxy 127.0.0.1:3000";
+  services.caddy.virtualHosts."adguard.hooba.be" = {
+    useACMEHost = "hooba.be";
+    extraConfig = "reverse_proxy 127.0.0.1:3000";
+  };
 
   # openFirewall does not cover the resolver itself
   networking.firewall.allowedTCPPorts = [53];
