@@ -7,7 +7,9 @@
   pkgs,
   ...
 }: {
-  imports = lib.optional (builtins.pathExists ./hardware-configuration.nix) ./hardware-configuration.nix;
+  imports =
+    [ ./opencloud.nix ]
+    ++ lib.optional (builtins.pathExists ./hardware-configuration.nix) ./hardware-configuration.nix;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
