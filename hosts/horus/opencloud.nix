@@ -15,9 +15,11 @@
       OC_INSECURE = "true";
       PROXY_TLS = "false";
     };
-
-    environmentFile = "/etc/opencloud.env";
   };
+
+  # OpenCloud fetches its own OIDC config from the url above. Resolve it
+  # locally, so logins don't depend on AdGuard being up.
+  networking.hosts."127.0.0.1" = ["cloud.horus"];
 
   # /srv is a separate volume on horus.
   systemd.services.opencloud.unitConfig.RequiresMountsFor = "/srv/opencloud";
