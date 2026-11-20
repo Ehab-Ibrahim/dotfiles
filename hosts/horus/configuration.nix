@@ -1,13 +1,17 @@
-# NixOS config for the `horus` home server (Lenovo Y50-70, i7-4710HQ).
-# See ./README.md for the reasoning.
-# Partitions come from disko.nix. hardware-configuration.nix is generated at
-# install time (see ./README.md); until then the config evaluates without it.
+# NixOS config for `horus` (Lenovo Y50-70): core host setup only; services live
+# in ./services. See ./README.md; hardware-configuration.nix is install-generated.
 {
   lib,
   pkgs,
   ...
 }: {
-  imports = lib.optional (builtins.pathExists ./hardware-configuration.nix) ./hardware-configuration.nix;
+  imports =
+    [
+      ./services/adguard.nix
+      ./services/caddy.nix
+      ./services/tailscale.nix
+    ]
+    ++ lib.optional (builtins.pathExists ./hardware-configuration.nix) ./hardware-configuration.nix;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
@@ -44,6 +48,7 @@
     };
   };
 
+  # Remote shell. Keys only; the account password is for the console and sudo.
   services.openssh = {
     enable = true;
     settings = {
@@ -51,35 +56,9 @@
       IPQoS = "cs0 cs0";
       ClientAliveInterval = 30;
       ClientAliveCountMax = 3;
-      # Keys only; the password below is for the console and sudo
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
     };
-  };
-
-  # Adguard home for DNS ad-blocking
-  services.adguardhome = {
-    enable = true;
-    openFirewall = true; # web UI port
-  };
-
-  # Reverse proxy: <service>.horus (AdGuard rewrite *.horus) to local ports
-  services.caddy = {
-    enable = true;
-    virtualHosts."http://adguard.horus".extraConfig = "reverse_proxy 127.0.0.1:3000";
-  };
-
-  networking.firewall = {
-    allowedTCPPorts = [53 80];
-    allowedUDPPorts = [53];
-    # Devices on the tailnet reach every service, like on the LAN
-    trustedInterfaces = ["tailscale0"];
-  };
-
-  # Remote access; log in once with `sudo tailscale up`
-  services.tailscale = {
-    enable = true;
-    openFirewall = true; # direct (peer-to-peer) connections
   };
 
   home-manager = {
@@ -103,8 +82,7 @@
     ];
   };
 
-  # Diagnostics. Don't run `lspci -vv` as root: reading the NIC's VPD likely
-  # hung it once
+  # Diagnostics. Avoid `lspci -vv` as root: reading the NIC's VPD likely hung it.
   environment.systemPackages = [
     pkgs.powertop
     pkgs.ethtool

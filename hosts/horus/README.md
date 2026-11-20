@@ -2,20 +2,26 @@
 
 Home server: Lenovo Y50-70 laptop, headless with the lid closed, wired Ethernet.
 
-## Settings
+## Configuration
 
 | Area | Setting |
 |---|---|
+| Layout | `configuration.nix` is core host setup (including TLP/lid); services live in `services/` |
 | Disk (`disko.nix`) | 1G EFI at `/boot`; LVM `pool`: root 50G, swap 8G, `/srv` 800G, ~72G free to grow either (`sudo lvextend -r -L +20G /dev/pool/srv`) |
 | Power (TLP) | runtime PM on, except the Realtek NIC (`r8169`); Wi-Fi and Bluetooth off; battery conservation mode (~60%) |
 | Headless | lid ignored, console blanks after 60s |
-| SSH | keys only; `IPQoS cs0 cs0` (the Wi-Fi AP stalled marked packets); keepalives every 30s |
 | Users | `eibrahim` (wheel, fish) with an initial password `changeme`; root has no password |
-| Tailscale | remote access; tailnet devices reach every port. After a reinstall: `sudo tailscale up` |
-| AdGuard Home | DNS on port 53, web UI on port 3000; configured in the UI, stored in `/var/lib/AdGuardHome` (back it up before a reinstall) |
-| Caddy | Reverse proxy on port 80; `http://adguard.horus` -> `localhost:3000`, backed by AdGuard DNS rewrites |
+| SSH | keys only; `IPQoS cs0 cs0` (the Wi-Fi AP stalled marked packets); keepalives every 30s |
 | Nix | weekly GC of generations older than 14 days; `@wheel` trusted, so deploys from the PC work |
 | Home-manager | NixOS module, `home.nix`; dotfiles copied into the store (`dotfiles.mutable = false`), no repo clone needed |
+
+## Services
+
+| Service | Setting |
+|---|---|
+| Tailscale (`services/tailscale.nix`) | remote access; tailnet devices reach every port. After a reinstall: `sudo tailscale up` |
+| AdGuard Home (`services/adguard.nix`) | DNS on port 53, web UI on port 3000 (proxied at `http://adguard.horus`); configured in the UI, stored in `/var/lib/AdGuardHome` (back it up before a reinstall) |
+| Caddy (`services/caddy.nix`) | Reverse proxy and TLS/certificate handling for local services; each service owns its vhost |
 
 ## Install (wipes the SSD)
 
@@ -33,11 +39,13 @@ NixOS minimal ISO on USB instead:
 
 ## Deploy
 
-From the PC: `deploy-horus`, which runs
+From the PC: `nixos-deploy horus`, which builds the host as a GC root and runs
 
 ```
 nixos-rebuild switch --flake .#horus --target-host horus --sudo --ask-sudo-password --use-substitutes
 ```
+
+Extra arguments are passed through to `nixos-rebuild`.
 
 If the NIC hangs (link up, no traffic), from the keyboard:
 `sudo modprobe -r r8169 && sudo modprobe r8169`. Avoid `sudo lspci -vv`.
