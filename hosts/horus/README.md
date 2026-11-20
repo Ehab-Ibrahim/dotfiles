@@ -11,7 +11,6 @@ Home server: Lenovo Y50-70 laptop, headless with the lid closed, wired Ethernet.
 | Headless | lid ignored, console blanks after 60s |
 | SSH | keys only; `IPQoS cs0 cs0` (the Wi-Fi AP stalled marked packets); keepalives every 30s |
 | Users | `eibrahim` (wheel, fish) with an initial password `changeme`; root has no password |
-| Docker | data in `/srv/docker` |
 | Tailscale | remote access; tailnet devices reach every port. After a reinstall: `sudo tailscale up` |
 | AdGuard Home | DNS on port 53, web UI on port 3000; configured in the UI, stored in `/var/lib/AdGuardHome` (back it up before a reinstall) |
 | Caddy | Reverse proxy on port 80; `http://adguard.horus` -> `localhost:3000`, backed by AdGuard DNS rewrites |

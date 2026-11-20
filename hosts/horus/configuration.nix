@@ -57,13 +57,6 @@
     };
   };
 
-  # Images, containers and volumes go on the big /srv volume, not root
-  virtualisation.docker = {
-    enable = true;
-    daemon.settings.data-root = "/srv/docker";
-  };
-  systemd.services.docker.unitConfig.RequiresMountsFor = "/srv/docker";
-
   # Adguard home for DNS ad-blocking
   services.adguardhome = {
     enable = true;
@@ -101,8 +94,7 @@
   programs.fish.enable = true;
   users.users.eibrahim = {
     isNormalUser = true;
-    # docker group membership is root-equivalent
-    extraGroups = ["wheel" "networkmanager" "docker"];
+    extraGroups = ["wheel" "networkmanager"];
     shell = pkgs.fish;
     # Only applies when the user is created; change it with `passwd` on first login
     initialPassword = "changeme";
