@@ -21,20 +21,17 @@
   ];
 
   # KDE refuses launching .desktop files without executable bit
-  # Copy .desktop files with the correct permissions to $XDG_DATA_HOME/nix
-  xdg.systemDirs.data = ["${config.xdg.dataHome}/nix"];
+  # Copy .desktop files with the correct permissions to $XDG_DATA_HOME/applications
 
   home.activation.kdeDesktopEntries = lib.hm.dag.entryAfter ["installPackages"] ''
-    nixApps="${config.xdg.dataHome}/nix/applications"
+    appDir="${config.xdg.dataHome}/applications"
     profileApps="${config.home.homeDirectory}/.nix-profile/share/applications"
 
-    mkdir -p "$nixApps"
-    rm -f "$nixApps"/*.desktop
-
+    mkdir -p "$appDir"
     for desktop in "$profileApps"/*.desktop; do
       [ -e "$desktop" ] || continue
       name=$(basename "$desktop")
-      install -m 755 "$desktop" "$nixApps/$name"
+      install -m 755 "$desktop" "$appDir/$name"
     done
   '';
 }
