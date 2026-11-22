@@ -1,5 +1,5 @@
 # Reverse proxy and TLS for <service>.hooba.be.
-{...}: {
+{config, ...}: {
   # Wildcard certificate via DNS-01; no inbound port is needed for validation.
   security.acme = {
     acceptTerms = true;
@@ -9,7 +9,7 @@
       extraDomainNames = ["hooba.be"];
       dnsProvider = "infomaniak";
       # Root-only token file loaded as a systemd credential (lego uses _FILE).
-      credentialFiles."INFOMANIAK_ACCESS_TOKEN_FILE" = "/var/lib/acme-token";
+      credentialFiles."INFOMANIAK_ACCESS_TOKEN_FILE" = config.sops.secrets.infomaniak_token.path;
     };
   };
 

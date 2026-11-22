@@ -37,5 +37,6 @@ in {
 
   programs.fish.shellInit = ''
     set -x SSH_AUTH_SOCK "${rbwSocket}"
+    set -x SOPS_AGE_SSH_PRIVATE_KEY_CMD "rbw get ssh-sops-eibrahim -f private_key"
   '';
 }

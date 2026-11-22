@@ -15,6 +15,14 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
+  sops = {
+    defaultSopsFile = ./secrets.yaml;
+    defaultSopsFormat = "yaml";
+    # Native SSH support decrypts ssh-ed25519 stanzas; sshKeyPaths would derive an incompatible age key.
+    age.sshKeyFile = "/var/lib/sops-nix/sops_ed25519_key";
+    secrets."infomaniak_token" = {};
+  };
+
   boot.loader.systemd-boot.enable = true;
   # Old generations stay on disk until GC, but drop out of the boot menu
   boot.loader.systemd-boot.configurationLimit = 10;

@@ -19,6 +19,10 @@
 
     # AI agents; no `follows`, so its binary cache hits
     llm-agents.url = "github:numtide/llm-agents.nix";
+
+    # Secrets management
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -53,6 +57,7 @@
         modules = [
           inputs.disko.nixosModules.disko
           inputs.home-manager.nixosModules.home-manager
+          inputs.sops-nix.nixosModules.sops
           ./hosts/horus/disko.nix
           ./hosts/horus/configuration.nix
         ];

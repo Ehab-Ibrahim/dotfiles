@@ -1,0 +1,10 @@
+keys:
+  - &eibrahim ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPhadBHLRx7/pa5lmD1yXM3Q4TwWoOSP5ina3eO99qgB
+  - &horus ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElpUk6T+E7HVqhWfQximZ83Oz1WAKoAsushF7H8nqJ5
+
+creation_rules:
+  - path_regex: hosts/horus/secrets\.yaml$
+    key_groups:
+      - age:
+          - *eibrahim
+          - *horus

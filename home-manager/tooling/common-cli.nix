@@ -15,6 +15,7 @@
     fzf
     lazygit
     ripgrep
+    sops
     starship
     yazi
     zellij
