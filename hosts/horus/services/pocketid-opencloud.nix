@@ -71,6 +71,7 @@ in {
     WEB_OIDC_METADATA_URL = "${issuer}/.well-known/openid-configuration";
     WEB_OIDC_RESPONSE_TYPE = "code";
     WEB_OIDC_SCOPE = "openid profile email groups";
+    OC_OIDC_CLIENT_SCOPES = "openid,profile,email,groups";
     PROXY_OIDC_REWRITE_WELLKNOWN = "true";
     PROXY_OIDC_ACCESS_TOKEN_VERIFY_METHOD = "none";
     PROXY_AUTOPROVISION_ACCOUNTS = "true";
