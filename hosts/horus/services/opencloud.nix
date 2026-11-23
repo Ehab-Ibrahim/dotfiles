@@ -23,6 +23,7 @@ in {
     environment = {
       OC_INSECURE = "true";
       PROXY_TLS = "false";
+      WEB_OPTION_DISABLE_SPONSOR_LINK = "true";
     };
   };
 
