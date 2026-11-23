@@ -13,6 +13,9 @@ from typing import NamedTuple
 BASE_URL = "http://127.0.0.1:1411"
 API_KEY = Path(os.environ["CREDENTIALS_DIRECTORY"], "POCKET_KEY").read_text().strip()
 
+# Pocket ID caps list pages at 100 (default 20).
+PAGE = "pagination[limit]=100"
+
 
 class Group(NamedTuple):
     name: str
@@ -89,7 +92,7 @@ def wait():
 def main():
     wait()
 
-    existing = {g["name"]: g for g in api("GET", "/api/user-groups")["data"]}
+    existing = {g["name"]: g for g in api("GET", f"/api/user-groups?{PAGE}")["data"]}
     group_ids = []
     for group in GROUPS:
         found = existing.get(group.name) or api(
@@ -104,7 +107,9 @@ def main():
             [{"key": "opencloud_role", "value": group.role}],
         )
 
-    existing_clients = {c["id"] for c in api("GET", "/api/oidc/clients")["data"]}
+    existing_clients = {
+        c["id"] for c in api("GET", f"/api/oidc/clients?{PAGE}")["data"]
+    }
     for cid, cfg in CLIENTS.items():
         if cid not in existing_clients:
             client = {
