@@ -9,6 +9,9 @@
     [
       ./services/adguard.nix
       ./services/caddy.nix
+      ./services/pocket-id.nix
+      ./services/opencloud.nix
+      ./services/pocketid-opencloud.nix
       ./services/tailscale.nix
     ]
     ++ lib.optional (builtins.pathExists ./hardware-configuration.nix) ./hardware-configuration.nix;
@@ -17,10 +20,9 @@
 
   sops = {
     defaultSopsFile = ./secrets.yaml;
-    defaultSopsFormat = "yaml";
     # Native SSH support decrypts ssh-ed25519 stanzas; sshKeyPaths would derive an incompatible age key.
     age.sshKeyFile = "/var/lib/sops-nix/sops_ed25519_key";
-    secrets."infomaniak_token" = {};
+    secrets.infomaniak_token = {};
   };
 
   boot.loader.systemd-boot.enable = true;

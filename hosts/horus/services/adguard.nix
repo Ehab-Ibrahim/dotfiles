@@ -3,6 +3,8 @@
   services.adguardhome = {
     enable = true;
     openFirewall = true; # web UI only
+    # /etc/hosts entries would override the wildcard dnsrewrite rules.
+    settings.dns.hostsfile_enabled = false;
   };
 
   # Vhost lives here so disabling AdGuard also drops its reverse proxy.
