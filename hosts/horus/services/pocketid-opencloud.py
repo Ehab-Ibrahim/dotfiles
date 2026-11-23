@@ -10,7 +10,8 @@ import urllib.request
 from pathlib import Path
 from typing import NamedTuple
 
-BASE_URL = "http://127.0.0.1:1411"
+BASE_URL = os.environ["POCKET_ID_URL"]
+CLOUD_URL = os.environ["OPENCLOUD_URL"].rstrip("/")
 API_KEY = Path(os.environ["CREDENTIALS_DIRECTORY"], "POCKET_KEY").read_text().strip()
 
 # Pocket ID caps list pages at 100 (default 20).
@@ -40,11 +41,11 @@ CLIENTS = {
     "web": Client(
         "OpenCloud Web",
         [
-            "https://cloud.hooba.be/",
-            "https://cloud.hooba.be/oidc-callback.html",
-            "https://cloud.hooba.be/oidc-silent-redirect.html",
+            f"{CLOUD_URL}/",
+            f"{CLOUD_URL}/oidc-callback.html",
+            f"{CLOUD_URL}/oidc-silent-redirect.html",
         ],
-        ("https://cloud.hooba.be/",),
+        (f"{CLOUD_URL}/",),
     ),
     "OpenCloudDesktop": Client(
         "OpenCloud Desktop",

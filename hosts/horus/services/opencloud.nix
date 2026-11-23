@@ -1,5 +1,12 @@
 # OpenCloud behind Caddy; optional Pocket ID integration is in ./pocketid-opencloud.nix.
-{pkgs, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: let
+  domain = "cloud.hooba.be";
+  cfg = config.services.opencloud;
+in {
   services.opencloud = {
     enable = true;
 
@@ -7,11 +14,10 @@
     package = pkgs.opencloud;
 
     # Must be https even though Caddy terminates TLS.
-    url = "https://cloud.hooba.be";
-    address = "127.0.0.1";
-    port = 9200;
+    url = "https://${domain}";
     stateDir = "/srv/opencloud";
 
+    # Replaces the module's default attrset, so OC_INSECURE must be restated.
     environment = {
       OC_INSECURE = "true";
       PROXY_TLS = "false";
@@ -19,15 +25,14 @@
   };
 
   # Resolve locally; don't depend on AdGuard.
-  networking.hosts."127.0.0.1" = ["cloud.hooba.be"];
+  networking.hosts."127.0.0.1" = [domain];
 
   # /srv is a separate volume.
-  systemd.services.opencloud.unitConfig.RequiresMountsFor = "/srv/opencloud";
-  systemd.services.opencloud-init-config.unitConfig.RequiresMountsFor = "/srv/opencloud";
+  systemd.services.opencloud.unitConfig.RequiresMountsFor = cfg.stateDir;
 
   # Vhost here so disabling OpenCloud drops the proxy; reuse the wildcard cert.
-  services.caddy.virtualHosts."cloud.hooba.be" = {
+  services.caddy.virtualHosts.${domain} = {
     useACMEHost = "hooba.be";
-    extraConfig = "reverse_proxy 127.0.0.1:9200";
+    extraConfig = "reverse_proxy ${cfg.address}:${toString cfg.port}";
   };
 }
