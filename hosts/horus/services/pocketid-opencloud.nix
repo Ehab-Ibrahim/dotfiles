@@ -1,4 +1,6 @@
-# Optional Pocket ID integration. Omit from imports to keep OpenCloud's built-in IdP.
+# Optional: OpenCloud logs in through Pocket ID. Omit from imports to keep OpenCloud's
+# built-in IdP; decide before OpenCloud's first start, switching later means
+# re-initialising it. Users need one of the groups below; the group sets their role.
 {
   config,
   lib,

@@ -1,4 +1,4 @@
-# Remote access; log in once with `sudo tailscale up`.
+# Tailscale: remote access. After a reinstall: `sudo tailscale up`.
 {...}: {
   services.tailscale = {
     enable = true;

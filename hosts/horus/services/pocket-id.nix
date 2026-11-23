@@ -1,4 +1,6 @@
-# Pocket ID at https://id.hooba.be; keys come from sops.
+# Pocket ID at https://id.hooba.be: passkey OIDC provider; keys come from sops.
+# State: /var/lib/pocket-id. After a reinstall: restore it, or create the admin
+# at https://id.hooba.be/setup and enroll a passkey.
 {config, ...}: let
   domain = "id.hooba.be";
   port = 1411;

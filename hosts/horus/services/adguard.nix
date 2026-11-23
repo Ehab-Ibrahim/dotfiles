@@ -1,4 +1,6 @@
-# AdGuard Home: DNS ad-blocking; local *.hooba.be resolution is set in its UI.
+# AdGuard Home at https://adguard.hooba.be: DNS resolver and ad-blocker.
+# State: /var/lib/AdGuardHome, including settings and the *.hooba.be DNS rewrites,
+# which are set in the UI. After a reinstall: restore it.
 {...}: {
   services.adguardhome = {
     enable = true;

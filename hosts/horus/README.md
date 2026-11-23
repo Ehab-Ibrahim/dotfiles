@@ -1,53 +1,78 @@
 # horus
 
-Headless home server (Lenovo Y50-70, wired Ethernet).
+Headless home server: Lenovo Y50-70 laptop, lid closed, wired Ethernet.
 
 ## Layout
 
-- `configuration.nix` — core host config; imports modules from `services/`.
-- `disko.nix` — disk layout; `hardware-configuration.nix` is install-generated.
-- `services/` — one module per service; each owns its Caddy vhost.
-- `secrets.yaml` — sops-encrypted secrets.
+- `configuration.nix`: host setup (power, SSH, users, Nix); imports `services/`.
+- `services/`: one module per service.
+- `disko.nix`: disk layout. LVM keeps ~72G free to grow a volume, e.g.
+  `sudo lvextend -r -L +20G /dev/pool/srv`.
+- `secrets.yaml`: sops-encrypted secrets.
+- `hardware-configuration.nix`: generated at install.
 
 ## Services
 
-Tailscale, AdGuard Home, Caddy, Pocket ID (passkey IdP at `id.hooba.be`) and
-OpenCloud (`cloud.hooba.be`, state in `/srv/opencloud`). The optional
-`services/pocketid-opencloud.nix` makes OpenCloud use Pocket ID as its OIDC
-provider; omit it to keep the built-in IdP. The choice is made on first deploy —
-switching later requires re-initialising OpenCloud.
+Each module in `services/` owns everything for its service, so dropping its
+import removes it completely:
+
+- its Caddy vhost `<name>.hooba.be` (`useACMEHost = "hooba.be"`) and a
+  `networking.hosts` entry, so horus resolves the name without AdGuard;
+- its secrets (`sops.secrets.<name>`);
+- a header comment with its URL, where its state lives and what to do after a
+  reinstall. Back up those paths before reinstalling.
+
+Large data goes on `/srv`, a separate volume.
 
 ## Secrets
 
-`secrets.yaml` holds the Infomaniak token and Pocket ID's `ENCRYPTION_KEY` and
-`STATIC_API_KEY`. Encrypted to the PC and host keys, decrypted at activation by
-sops-nix into `/run/secrets`. Edit with `sops hosts/horus/secrets.yaml`.
+sops-nix decrypts `secrets.yaml` at activation into root-only files under
+`/run/secrets`; modules use `config.sops.secrets.<name>.path`. Recipients are in
+`/.sops.yaml`: the PC, and a horus decryption key that grants no login, stored
+in rbw as `ssh-sops-horus` and staged at install. On the PC, sops reads keys
+from rbw (`SOPS_AGE_SSH_PRIVATE_KEY_CMD` in `home-manager/services/rbw.nix`):
 
-## Install
+- edit: `sops hosts/horus/secrets.yaml`
+- after changing recipients: `sops updatekeys -y hosts/horus/secrets.yaml`
 
-1. Boot a NixOS minimal ISO, `sudo passwd root`, note the IP.
-2. Stage the host key:
+## TLS
+
+Caddy holds one wildcard `*.hooba.be` Let's Encrypt cert, obtained by DNS-01
+with an Infomaniak API token (`dns:read`, `dns:write`) from sops. Without the
+token it serves a self-signed placeholder. Nothing is exposed to the internet;
+LAN clients resolve `*.hooba.be` through AdGuard rewrites.
+
+## Install (wipes the SSD)
+
+nixos-anywhere's kexec installer hung the NIC, so boot a NixOS minimal ISO from
+USB instead.
+
+1. Boot the USB, run `sudo passwd root`, note the IP.
+2. Stage the sops key (`--extra-files` copies it into the new system):
    ```
    umask 077
    mkdir -p ~/horus-extra/var/lib/sops-nix
    rbw get ssh-sops-horus -f private_key > ~/horus-extra/var/lib/sops-nix/sops_ed25519_key
    ```
-3. From the PC:
+3. From this repo on the PC:
    ```
+   ssh-copy-id -f -o PubkeyAuthentication=no root@<ip>
    nix run github:nix-community/nixos-anywhere -- \
      --flake .#horus --phases disko,install --target-host root@<ip> \
      --extra-files ~/horus-extra
    ```
-4. Reboot, log in, set the password.
-
-TLS uses a wildcard `*.hooba.be` cert via DNS-01 (token from sops). After a fresh
-install: `sudo tailscale up`, restore AdGuard's state, sign up the initial Pocket
-ID admin and enroll a passkey.
+4. Remove the USB and reboot. Then `ssh-keygen -R 192.168.0.4`, `ssh horus`,
+   and replace the initial password (`changeme`) with `passwd`.
+5. Do the after-reinstall steps in each service module's header.
 
 ## Deploy
 
-`nixos-deploy horus`, or:
+From the PC: `nixos-deploy horus`. It keeps the build as a GC root, then runs
+`nixos-rebuild switch --flake .#horus --target-host horus --sudo
+--ask-sudo-password --use-substitutes`, passing extra arguments through.
 
-```
-nixos-rebuild switch --flake .#horus --target-host horus --sudo --ask-sudo-password --use-substitutes
-```
+## Troubleshooting
+
+NIC hangs (link up, no traffic): at the keyboard, run
+`sudo modprobe -r r8169 && sudo modprobe r8169`. Avoid `sudo lspci -vv`:
+reading the NIC's VPD likely caused a hang.

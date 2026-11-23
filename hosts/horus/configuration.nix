@@ -62,7 +62,7 @@
   services.openssh = {
     enable = true;
     settings = {
-      # Disable QoS marking - makes ssh more reliable
+      # Disable QoS marking: the Wi-Fi AP stalled marked packets
       IPQoS = "cs0 cs0";
       ClientAliveInterval = 30;
       ClientAliveCountMax = 3;

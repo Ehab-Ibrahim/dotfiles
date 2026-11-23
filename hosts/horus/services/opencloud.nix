@@ -1,4 +1,6 @@
-# OpenCloud behind Caddy; optional Pocket ID integration is in ./pocketid-opencloud.nix.
+# OpenCloud at https://cloud.hooba.be; optional Pocket ID login is in ./pocketid-opencloud.nix.
+# State: /srv/opencloud and /etc/opencloud/opencloud.yaml (generated secrets; the
+# data is unusable without it). After a reinstall: restore both.
 {
   config,
   pkgs,
