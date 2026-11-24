@@ -58,7 +58,6 @@
     };
   };
 
-  # Input for ./pocketid-opencloud.py.
   provision = pkgs.writeText "pocketid-opencloud.json" (builtins.toJSON {inherit groups clients;});
 in {
   # External-OIDC settings (per the Pocket ID guide); `web` is a client ID above.
@@ -106,7 +105,7 @@ in {
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      ExecStart = "${pkgs.python3Minimal.interpreter} ${./pocketid-opencloud.py} ${provision}";
+      ExecStart = "${pkgs.python3Minimal.interpreter} ${./pocketid-provision.py} ${provision}";
       LoadCredential = "POCKET_KEY:${config.sops.secrets.pocket_id_static_api_key.path}";
       NoNewPrivileges = true;
       PrivateTmp = true;

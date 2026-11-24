@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""Ensure the groups and OIDC clients from a JSON file exist in Pocket ID.
+"""Ensure Pocket ID groups and OIDC clients from <provision.json> exist.
 
-Usage: pocketid-opencloud.py <provision.json>, with
-  {"groups": [{"name", "friendlyName", ...}, ...],
-   "clients": {"<client id>": {"name", "callbacks", "logout"?}, ...}}
-Missing groups are created, and missing clients as public PKCE clients; every
-client is limited to these groups. Existing ones are left as they are.
+Spec: {"groups": [{"name", "friendlyName"}],
+       "clients": {"<id>": {"name", "callbacks", "logout"?}}}
+Creates missing groups and public PKCE clients (consent skipped), restricted to
+these groups; leaves existing ones alone except for allowed groups.
 """
 
 import json
@@ -19,7 +18,7 @@ from pathlib import Path
 BASE_URL = os.environ["POCKET_ID_URL"]
 API_KEY = Path(os.environ["CREDENTIALS_DIRECTORY"], "POCKET_KEY").read_text().strip()
 
-# Pocket ID caps list pages at 100 (default 20).
+# Pocket ID defaults pagination to 20.
 PAGE = "pagination[limit]=100"
 
 

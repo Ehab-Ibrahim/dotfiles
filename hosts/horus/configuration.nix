@@ -11,6 +11,8 @@
       ./services/caddy.nix
       ./services/pocket-id.nix
       ./services/opencloud.nix
+      ./services/nextcloud.nix
+      ./services/pocketid-nextcloud.nix
       ./services/pocketid-opencloud.nix
       ./services/tailscale.nix
     ]
