@@ -27,6 +27,8 @@ in {
     appstoreEnable = false;
 
     settings = {
+      # Land on Files after login instead of the dashboard.
+      defaultapp = "files";
       # Links built during web requests; Caddy talks plain HTTP to nginx.
       overwriteprotocol = "https";
       # Links built outside web requests (cron jobs, occ).
