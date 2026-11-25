@@ -10,7 +10,6 @@
       ./services/adguard.nix
       ./services/caddy.nix
       ./services/pocket-id
-      ./services/opencloud
       ./services/nextcloud
       ./services/tailscale.nix
     ]

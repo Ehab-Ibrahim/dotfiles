@@ -1,7 +1,7 @@
-# Nextcloud at https://nextcloud.hooba.be.
+# Nextcloud at https://cloud.hooba.be.
 # State: /srv/nextcloud, /srv/postgresql; back up before reinstall.
 {pkgs, ...}: let
-  domain = "nextcloud.hooba.be";
+  domain = "cloud.hooba.be";
   port = 8081;
   stateDir = "/srv/nextcloud";
 in {

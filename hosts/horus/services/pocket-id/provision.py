@@ -4,7 +4,7 @@
 Spec: {"groups": [{"name", "friendlyName"}],
        "clients": {"<id>": {"name", "callbacks", "logout"?}}}
 Creates missing groups and public PKCE clients (consent skipped), restricted to
-these groups; leaves existing ones alone except for allowed groups.
+these groups; keeps existing clients' callbacks and allowed groups in sync.
 """
 
 import json
@@ -64,22 +64,33 @@ def main():
         )
         group_ids.append(found["id"])
 
-    existing = {c["id"] for c in api("GET", f"/api/oidc/clients?{PAGE}")["data"]}
+    existing = {c["id"]: c for c in api("GET", f"/api/oidc/clients?{PAGE}")["data"]}
     for cid, client in spec["clients"].items():
-        if cid not in existing:
+        callbacks = client["callbacks"]
+        logout = client.get("logout", [])
+        found = existing.get(cid)
+        if not found:
             api(
                 "POST",
                 "/api/oidc/clients",
                 {
                     "id": cid,
                     "name": client["name"],
-                    "callbackURLs": client["callbacks"],
-                    "logoutCallbackURLs": client.get("logout", []),
+                    "callbackURLs": callbacks,
+                    "logoutCallbackURLs": logout,
                     "isPublic": True,
                     "pkceEnabled": True,
                     "skipConsent": True,
                 },
             )
+        else:
+            # PUT replaces the whole client, so round-trip the listed values.
+            found.update(
+                name=client["name"],
+                callbackURLs=callbacks,
+                logoutCallbackURLs=logout,
+            )
+            api("PUT", f"/api/oidc/clients/{cid}", found)
         api(
             "PUT",
             f"/api/oidc/clients/{cid}/allowed-user-groups",
