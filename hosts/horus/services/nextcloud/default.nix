@@ -29,6 +29,8 @@ in {
     settings = {
       # Land on Files after login instead of the dashboard.
       defaultapp = "files";
+      # Host used for web-request URLs; overrides any stale value in config.php.
+      overwritehost = domain;
       # Links built during web requests; Caddy talks plain HTTP to nginx.
       overwriteprotocol = "https";
       # Links built outside web requests (cron jobs, occ).
