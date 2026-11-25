@@ -1,10 +1,13 @@
 # Nextcloud at https://nextcloud.hooba.be.
 # State: /srv/nextcloud, /srv/postgresql; back up before reinstall.
-{config, pkgs, ...}: let
+{pkgs, ...}: let
   domain = "nextcloud.hooba.be";
   port = 8081;
   stateDir = "/srv/nextcloud";
 in {
+  # Optional Pocket ID login; drop this import to use local accounts only.
+  imports = [./pocketid.nix];
+
   # Resolve locally; don't depend on AdGuard.
   networking.hosts."127.0.0.1" = [domain];
 
@@ -21,15 +24,15 @@ in {
     database.createLocally = true;
     configureRedis = true;
     caching.apcu = true;
-    caching.redis = true;
     appstoreEnable = false;
 
     settings = {
+      # Links built during web requests; Caddy talks plain HTTP to nginx.
       overwriteprotocol = "https";
-      overwritehost = domain;
-      trusted_proxies = ["127.0.0.1" "::1"];
-      loglevel = 2;
-      configfilemode = 432; # 0660, group-writable config.php
+      # Links built outside web requests (cron jobs, occ).
+      "overwrite.cli.url" = "https://${domain}";
+      # Read the real client IP from Caddy's X-Forwarded-For.
+      trusted_proxies = ["127.0.0.1"];
     };
   };
 
@@ -42,7 +45,12 @@ in {
 
   # Loopback port; Caddy owns 80/443.
   services.nginx.virtualHosts.${domain} = {
-    listen = [{addr = "127.0.0.1"; port = port;}];
+    listen = [
+      {
+        addr = "127.0.0.1";
+        port = port;
+      }
+    ];
   };
 
   services.caddy.virtualHosts.${domain} = {

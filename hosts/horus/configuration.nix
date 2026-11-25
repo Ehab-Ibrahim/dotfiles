@@ -9,11 +9,9 @@
     [
       ./services/adguard.nix
       ./services/caddy.nix
-      ./services/pocket-id.nix
-      ./services/opencloud.nix
-      ./services/nextcloud.nix
-      ./services/pocketid-nextcloud.nix
-      ./services/pocketid-opencloud.nix
+      ./services/pocket-id
+      ./services/opencloud
+      ./services/nextcloud
       ./services/tailscale.nix
     ]
     ++ lib.optional (builtins.pathExists ./hardware-configuration.nix) ./hardware-configuration.nix;

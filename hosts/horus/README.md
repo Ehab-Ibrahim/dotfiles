@@ -5,7 +5,8 @@ Headless home server: Lenovo Y50-70 laptop, lid closed, wired Ethernet.
 ## Layout
 
 - `configuration.nix`: host setup (power, SSH, users, Nix); imports `services/`.
-- `services/`: one module per service.
+- `services/`: one module per service; a service with extras (e.g. Pocket ID
+  login) is a folder whose `default.nix` imports them.
 - `disko.nix`: disk layout. LVM keeps ~72G free to grow a volume, e.g.
   `sudo lvextend -r -L +20G /dev/pool/srv`.
 - `secrets.yaml`: sops-encrypted secrets.

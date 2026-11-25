@@ -1,4 +1,4 @@
-# OpenCloud at https://cloud.hooba.be; optional Pocket ID login is in ./pocketid-opencloud.nix.
+# OpenCloud at https://cloud.hooba.be; optional Pocket ID login is in ./pocketid.nix.
 # State: /srv/opencloud and /etc/opencloud/opencloud.yaml (generated secrets; the
 # data is unusable without it). After a reinstall: restore both.
 {
@@ -9,6 +9,8 @@
   domain = "cloud.hooba.be";
   cfg = config.services.opencloud;
 in {
+  imports = [./pocketid.nix];
+
   services.opencloud = {
     enable = true;
 

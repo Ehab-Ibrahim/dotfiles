@@ -8,6 +8,7 @@
   pocketId = config.services.pocket-id.settings;
   issuer = pocketId.APP_URL;
   cloud = "https://${config.services.nextcloud.hostName}";
+  clientId = "nextcloud";
 
   # Only these Pocket ID groups may sign in; they also become Nextcloud groups.
   groups = [
@@ -21,7 +22,7 @@
     }
   ];
 
-  clients.nextcloud = {
+  clients.${clientId} = {
     name = "Nextcloud";
     callbacks = ["${cloud}/apps/oidc_login/oidc"];
     logout = ["${cloud}/"];
@@ -37,7 +38,7 @@ in {
     # id.hooba.be is loopback-mapped.
     allow_local_remote_servers = true;
     oidc_login_provider_url = issuer;
-    oidc_login_client_id = "nextcloud";
+    oidc_login_client_id = clientId;
     oidc_login_client_secret = "";
     oidc_login_code_challenge_method = "S256";
     oidc_login_scope = "openid profile email groups";
@@ -56,7 +57,7 @@ in {
       groups = "groups";
       login_filter = "groups";
     };
-    oidc_login_filter_allowed_values = ["nextcloud_admins" "nextcloud_users"];
+    oidc_login_filter_allowed_values = map (g: g.name) groups;
   };
 
   systemd.services.pocket-id-nextcloud-provision = {
@@ -69,12 +70,12 @@ in {
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
+      ExecStart = "${pkgs.python3Minimal.interpreter} ${../pocket-id/provision.py} ${provision}";
       LoadCredential = "POCKET_KEY:${config.sops.secrets.pocket_id_static_api_key.path}";
       NoNewPrivileges = true;
       PrivateTmp = true;
       ProtectHome = true;
       ProtectSystem = "strict";
     };
-    script = "${pkgs.python3Minimal.interpreter} ${./pocketid-provision.py} ${provision}";
   };
 }

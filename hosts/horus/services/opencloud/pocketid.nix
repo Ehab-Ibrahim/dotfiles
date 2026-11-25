@@ -1,4 +1,4 @@
-# Optional: OpenCloud logs in through Pocket ID. Omit from imports to keep OpenCloud's
+# Optional: OpenCloud logs in through Pocket ID. Drop its import in ./default.nix to keep OpenCloud's
 # built-in IdP; decide before OpenCloud's first start, switching later means
 # re-initialising it. Users need one of the groups below; the group sets their role.
 {
@@ -105,7 +105,7 @@ in {
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      ExecStart = "${pkgs.python3Minimal.interpreter} ${./pocketid-provision.py} ${provision}";
+      ExecStart = "${pkgs.python3Minimal.interpreter} ${../pocket-id/provision.py} ${provision}";
       LoadCredential = "POCKET_KEY:${config.sops.secrets.pocket_id_static_api_key.path}";
       NoNewPrivileges = true;
       PrivateTmp = true;
