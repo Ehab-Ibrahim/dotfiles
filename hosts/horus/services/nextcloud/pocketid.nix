@@ -11,16 +11,10 @@
   clientId = "nextcloud";
 
   # Only these Pocket ID groups may sign in; they also become Nextcloud groups.
-  groups = [
-    {
-      name = "nextcloud_admins";
-      friendlyName = "Nextcloud Admins";
-    }
-    {
-      name = "nextcloud_users";
-      friendlyName = "Nextcloud Users";
-    }
-  ];
+  groups = {
+    nextcloud_admins = "Nextcloud Admins";
+    nextcloud_users = "Nextcloud Users";
+  };
 
   clients.${clientId} = {
     name = "Nextcloud";
@@ -57,7 +51,7 @@ in {
       groups = "groups";
       login_filter = "groups";
     };
-    oidc_login_filter_allowed_values = map (g: g.name) groups;
+    oidc_login_filter_allowed_values = builtins.attrNames groups;
   };
 
   systemd.services.pocket-id-nextcloud-provision = {

@@ -1,7 +1,11 @@
 # Pocket ID at https://id.hooba.be: passkey OIDC provider; keys come from sops.
 # State: /var/lib/pocket-id. After a reinstall: restore it, or create the admin
 # at https://id.hooba.be/setup and enroll a passkey.
-{config, ...}: let
+{
+  config,
+  lib,
+  ...
+}: let
   domain = "id.hooba.be";
   port = 1411;
 in {
@@ -25,6 +29,10 @@ in {
       STATIC_API_KEY = config.sops.secrets.pocket_id_static_api_key.path;
     };
   };
+
+  # Pocket ID reports readiness, so units ordered after it can call its API
+  # right away (the module defaults to "simple").
+  systemd.services.pocket-id.serviceConfig.Type = lib.mkForce "notify";
 
   # Vhost here so disabling Pocket ID drops the proxy.
   services.caddy.virtualHosts.${domain} = {
