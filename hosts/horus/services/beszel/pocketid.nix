@@ -29,15 +29,11 @@
     };
   });
 
-  # The API needs a superuser: upsert one with a throwaway password.
-  # A second superuser also closes Beszel's first-account setup page.
+  # USER_EMAIL/USER_PASSWORD come from sops; Beszel's first-run migration uses
+  # them to create the admin needed for this API login.
   setup = pkgs.writers.writeNu "beszel-oidc" ''
     let url = "http://${hub.host}:${toString hub.port}"
-    let email = "provision@beszel.local"
-    let password = random chars --length 32
     let secret = open --raw ($env.CREDENTIALS_DIRECTORY | path join OIDC_SECRET)
-
-    ^${hub.package}/bin/beszel-hub superuser upsert $email $password
 
     # Wait up to 30s for the hub.
     for attempt in 1..30 {
@@ -47,7 +43,7 @@
     let login = (
       http post $"($url)/api/collections/_superusers/auth-with-password"
         --content-type application/json
-        {identity: $email, password: $password}
+        {identity: $env.USER_EMAIL, password: $env.USER_PASSWORD}
     )
 
     let settings = open ${oauth2} | upsert oauth2.providers.0.clientSecret $secret
@@ -56,15 +52,17 @@
         --content-type application/json
         --headers {Authorization: $login.token}
     ) | ignore
-
-    # Leave only the migration's temp superuser behind.
-    ^${hub.package}/bin/beszel-hub superuser delete $email
   '';
 in {
-  services.beszel.hub.environment = {
-    DISABLE_PASSWORD_AUTH = "true";
-    # Create users on first Pocket ID login.
-    USER_CREATION = "true";
+  sops.secrets.beszel_bootstrap = {};
+
+  services.beszel.hub = {
+    environment = {
+      DISABLE_PASSWORD_AUTH = "true";
+      # Create users on first Pocket ID login.
+      USER_CREATION = "true";
+    };
+    environmentFile = config.sops.secrets.beszel_bootstrap.path;
   };
 
   # Only this group may sign in.
