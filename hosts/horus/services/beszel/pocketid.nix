@@ -56,6 +56,9 @@
         --content-type application/json
         --headers {Authorization: $login.token}
     ) | ignore
+
+    # Leave only the migration's temp superuser behind.
+    ^${hub.package}/bin/beszel-hub superuser delete $email
   '';
 in {
   services.beszel.hub.environment = {

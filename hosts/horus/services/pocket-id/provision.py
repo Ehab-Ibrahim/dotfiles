@@ -3,15 +3,14 @@
 
 Spec: {"groups": {"<name>": "<friendly name>"},
        "clients": {"<id>": {"name", "callbacks", "logout"?, "secretFile"?}}}
-Creates missing groups and clients. Each run sets the listed settings, skips
-consent and restricts sign-in to these groups; settings changed by hand in the
-admin UI (description, logo, ...) are kept. Clients are public PKCE clients,
-unless they have a secretFile: then each run replaces the client's secret with
-a fresh one written to that file, so no secret is stored.
+Creates missing groups/clients and reapplies listed settings (other UI edits
+are kept), restricting sign-in to those groups. Clients are public PKCE unless
+secretFile is set, which keeps a stable secret out of the Nix store.
 """
 
 import json
 import os
+import secrets
 import sys
 import urllib.error
 import urllib.request
@@ -75,10 +74,16 @@ def main():
         )
 
         if secret_file:
+            # Stable value so reboots can't desync Pocket ID and the service.
+            file = Path(secret_file)
+            secret = (
+                file.read_text().strip() if file.exists() else secrets.token_urlsafe(32)
+            )
+            file.write_text(secret)
             path = f"/api/oidc/clients/{cid}/secrets"
             for old in api("GET", path) or []:
                 api("DELETE", f"{path}/{old['id']}")
-            Path(secret_file).write_text(api("POST", path, {})["secret"])
+            api("POST", path, {"secret": secret})
 
     print("Pocket ID provisioning complete")
 
