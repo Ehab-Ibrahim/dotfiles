@@ -8,6 +8,7 @@
   imports =
     [
       ./services/adguard.nix
+      ./services/beszel
       ./services/caddy.nix
       ./services/pocket-id
       ./services/nextcloud
