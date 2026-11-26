@@ -24,7 +24,7 @@
 
   # The agent only accepts the hub's key: create it before the hub would, and
   # hand the public half to the agent (systemd reads EnvironmentFile as root).
-  prepare = pkgs.writers.writeNu "beszel-hub-prepare" /* nu */ ''
+  prepare = pkgs.writers.writeNu "beszel-hub-prepare" ''
     let key = "beszel_data/id_ed25519"
     if not ($key | path exists) {
       ^${pkgs.openssh}/bin/ssh-keygen -q -t ed25519 -N "" -C "" -f $key
