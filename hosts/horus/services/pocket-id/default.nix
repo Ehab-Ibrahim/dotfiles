@@ -9,6 +9,9 @@
   domain = "id.hooba.be";
   port = 1411;
 in {
+  # services.pocket-id.provision: groups and clients for other services.
+  imports = [./provision.nix];
+
   sops.secrets = {
     pocket_id_encryption_key = {};
     pocket_id_static_api_key = {};

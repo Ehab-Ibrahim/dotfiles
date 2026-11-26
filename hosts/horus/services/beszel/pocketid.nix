@@ -5,22 +5,11 @@
   pkgs,
   ...
 }: let
-  pocketId = config.services.pocket-id.settings;
   hub = config.services.beszel.hub;
-  issuer = pocketId.APP_URL;
+  issuer = config.services.pocket-id.settings.APP_URL;
   clientId = "beszel";
-  stateDir = "pocket-id-beszel";
-  secretFile = "/var/lib/${stateDir}/client-secret";
-
-  # Only this group may sign in.
-  provision = pkgs.writeText "pocketid-beszel.json" (builtins.toJSON {
-    groups.beszel_users = "Beszel Users";
-    clients.${clientId} = {
-      name = "Beszel";
-      callbacks = ["${hub.environment.APP_URL}/api/oauth2-redirect"];
-      inherit secretFile;
-    };
-  });
+  # In the state dir of pocket-id-beszel-provision (../pocket-id/provision.nix).
+  secretFile = "/var/lib/pocket-id-beszel/client-secret";
 
   # PATCH body for Beszel's users collection; secret added at runtime.
   oauth2 = pkgs.writeText "beszel-oauth2.json" (builtins.toJSON {
@@ -75,28 +64,20 @@ in {
     USER_CREATION = "true";
   };
 
-  # Once per boot, before the hub; the hub can't start until it succeeds once.
+  # Only this group may sign in.
+  services.pocket-id.provision.beszel = {
+    groups.beszel_users = "Beszel Users";
+    clients.${clientId} = {
+      name = "Beszel";
+      callbacks = ["${hub.environment.APP_URL}/api/oauth2-redirect"];
+      inherit secretFile;
+    };
+  };
+
+  # Before the hub, which can't start until this succeeds once.
   systemd.services.pocket-id-beszel-provision = {
-    description = "Provision Beszel's Pocket ID client and group";
-    after = ["pocket-id.service"];
-    wants = ["pocket-id.service"];
     before = ["beszel-hub.service"];
     wantedBy = ["beszel-hub.service"];
-
-    environment.POCKET_ID_URL = "http://${pocketId.HOST}:${toString pocketId.PORT}";
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = "${pkgs.python3Minimal.interpreter} ${../pocket-id/provision.py} ${provision}";
-      LoadCredential = "POCKET_KEY:${config.sops.secrets.pocket_id_static_api_key.path}";
-      StateDirectory = stateDir;
-      StateDirectoryMode = "0700";
-      UMask = "0077";
-      NoNewPrivileges = true;
-      PrivateTmp = true;
-      ProtectHome = true;
-      ProtectSystem = "strict";
-    };
   };
 
   systemd.services.beszel-hub.serviceConfig = {

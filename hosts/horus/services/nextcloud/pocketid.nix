@@ -1,12 +1,7 @@
 # Nextcloud + Pocket ID SSO via oidc_login.
 # Config lives in config.php; public PKCE client, no client secret.
-{
-  config,
-  pkgs,
-  ...
-}: let
-  pocketId = config.services.pocket-id.settings;
-  issuer = pocketId.APP_URL;
+{config, ...}: let
+  issuer = config.services.pocket-id.settings.APP_URL;
   cloud = "https://${config.services.nextcloud.hostName}";
   clientId = "nextcloud";
 
@@ -21,8 +16,6 @@
     callbacks = ["${cloud}/apps/oidc_login/oidc"];
     logout = ["${cloud}/"];
   };
-
-  provision = pkgs.writeText "pocketid-nextcloud.json" (builtins.toJSON {inherit groups clients;});
 in {
   services.nextcloud.extraApps = {
     inherit (config.services.nextcloud.package.packages.apps) oidc_login;
@@ -54,22 +47,5 @@ in {
     oidc_login_filter_allowed_values = builtins.attrNames groups;
   };
 
-  systemd.services.pocket-id-nextcloud-provision = {
-    description = "Provision Nextcloud's Pocket ID client and groups";
-    after = ["pocket-id.service"];
-    wants = ["pocket-id.service"];
-    wantedBy = ["multi-user.target"];
-
-    environment.POCKET_ID_URL = "http://${pocketId.HOST}:${toString pocketId.PORT}";
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = "${pkgs.python3Minimal.interpreter} ${../pocket-id/provision.py} ${provision}";
-      LoadCredential = "POCKET_KEY:${config.sops.secrets.pocket_id_static_api_key.path}";
-      NoNewPrivileges = true;
-      PrivateTmp = true;
-      ProtectHome = true;
-      ProtectSystem = "strict";
-    };
-  };
+  services.pocket-id.provision.nextcloud = {inherit groups clients;};
 }
