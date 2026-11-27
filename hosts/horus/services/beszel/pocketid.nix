@@ -2,6 +2,7 @@
 # secret: a root unit fetches it, so the hub never sees the Pocket ID API key.
 {
   config,
+  lib,
   pkgs,
   ...
 }: let
@@ -29,8 +30,7 @@
     };
   });
 
-  # USER_EMAIL/USER_PASSWORD come from sops; Beszel's first-run migration uses
-  # them to create the admin needed for this API login.
+  # Logs in with USER_EMAIL/USER_PASSWORD from sops (superuser upserted below).
   setup = pkgs.writers.writeNu "beszel-oidc" ''
     let url = "http://${hub.host}:${toString hub.port}"
     let secret = open --raw ($env.CREDENTIALS_DIRECTORY | path join OIDC_SECRET)
@@ -84,6 +84,10 @@ in {
   systemd.services.beszel-hub.serviceConfig = {
     # systemd copies the root-only file for the hub.
     LoadCredential = "OIDC_SECRET:${secretFile}";
+    # After migrations; syncs the superuser with sops.
+    ExecStartPre = lib.mkAfter [
+      "${hub.package}/bin/beszel-hub superuser upsert \${USER_EMAIL} \${USER_PASSWORD}"
+    ];
     # "-": on failure, keep the previous login config.
     ExecStartPost = ["-${setup}"];
   };
