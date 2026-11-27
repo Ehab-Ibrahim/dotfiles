@@ -61,6 +61,8 @@ in {
       DISABLE_PASSWORD_AUTH = "true";
       # Create users on first Pocket ID login.
       USER_CREATION = "true";
+      # Same-window redirect: the automatic login popup gets blocked.
+      OAUTH_DISABLE_POPUP = "true";
     };
     environmentFile = config.sops.secrets.beszel_bootstrap.path;
   };
@@ -70,7 +72,8 @@ in {
     groups.beszel_users = "Beszel Users";
     clients.${clientId} = {
       name = "Beszel";
-      callbacks = ["${hub.environment.APP_URL}/api/oauth2-redirect"];
+      # The redirect flow returns to the app root.
+      callbacks = ["${hub.environment.APP_URL}/"];
       inherit secretFile;
     };
   };
